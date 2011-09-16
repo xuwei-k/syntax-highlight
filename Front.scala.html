@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>Front.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> com.github.xuwei_k
+
+<span class="keyword">import</span> javax.servlet.http._
+<span class="keyword">import</span> org.scalatra.<span class="delimiter">{</span> ScalatraFilter <span class="delimiter">}</span>
+<span class="keyword">import</span> org.apache.commons.fileupload.<span class="delimiter">{</span>FileItemStream,FileItemIterator<span class="delimiter">}</span>
+<span class="keyword">import</span> org.apache.commons.fileupload.servlet.ServletFileUpload
+<span class="keyword">import</span> scala.collection.<span title="object scala.collection.JavaConversions">JavaConversions</span>._
+<span class="keyword">import</span> java.io.<span class="delimiter">{</span> ByteArrayOutputStream, ByteArrayInputStream, File, InputStream <span class="delimiter">}</span>
+<span class="keyword">import</span> com.google.appengine.api.mail.<span class="delimiter">{</span> MailService <span class="delimiter">}</span>
+
+<span class="comment">/**
+ * request の urlによって処理振り分ける
+ * @author kenji
+ *
+ */</span>
+<span class="keyword">class</span> <a title="class Front extends java.lang.Object with org.scalatra.ScalatraFilter with ScalaObject" id="9210">Front</a> <span title="ScalaObject" class="keyword">extends</span> <span title="org.scalatra.ScalatraFilter">ScalatraFilter</span> <span class="delimiter">{</span>
+	
+	
+ <span class="keyword">implicit</span> <span class="keyword">def</span> <a title="[A](ite: AnyRef{def next(): A; def hasNext(): Boolean})java.lang.Object with Iterator[A]" id="19742">toScalaIterator</a><span class="delimiter">[</span><a title="&gt;: Nothing &lt;: Any" id="19744">A</a><span class="delimiter">]</span><span class="delimiter">(</span><a title="&lt;refinement&gt; extends AnyRef" id="20036">ite</a>:<a href="#20270" title="&lt;refinement&gt; extends AnyRef" class="delimiter">{</a><span class="keyword">def</span> next<span class="delimiter">(</span><span class="delimiter">)</span>:A;<span class="keyword">def</span> hasNext<span class="delimiter">(</span><span class="delimiter">)</span>:Boolean<span class="delimiter">}</span><span class="delimiter">)</span> =
+  <a href="#20039" title="java.lang.Object with Iterator[A]" class="keyword">new</a> <a title="anonymous class $anon extends java.lang.Object with Iterator[A]" id="20039">Iterator</a><span class="delimiter">[</span>A<span class="delimiter">]</span><span class="delimiter">{</span>
+    <span class="keyword">def</span> <a title="()A" id="20265">next</a> = <a href="#20036" title="&lt;refinement&gt; extends AnyRef">ite</a>.<a href="#20271" title="()A">next</a>
+    <span class="keyword">def</span> <a title="=&gt; Boolean" id="20266">hasNext</a> = <a href="#20036" title="&lt;refinement&gt; extends AnyRef">ite</a>.<a href="#20272" title="()Boolean">hasNext</a>
+  <span class="delimiter">}</span>
+
+  <a href="#9210" title="(routeMatchers: org.scalatra.RouteMatcher*)(action: =&gt; Any)org.scalatra.Route">get</a><span class="delimiter">(</span><a href="#9210" title="implicit org.scalatra.ScalatraKernel.string2RouteMatcher : (path: String)org.scalatra.RouteMatcher" class="string">&quot;/*&quot;</a><span class="delimiter">)</span> <span class="delimiter">{</span>
+    <span title="java.lang.String(&quot;hello&quot;)" class="string">&quot;hello&quot;</span>
+  <span class="delimiter">}</span>
+
+  <a href="#9210" title="(routeMatchers: org.scalatra.RouteMatcher*)(action: =&gt; Any)org.scalatra.Route">post</a><span class="delimiter">(</span><a href="#9210" title="implicit org.scalatra.ScalatraKernel.string2RouteMatcher : (path: String)org.scalatra.RouteMatcher" class="string">&quot;/source.zip&quot;</a><span class="delimiter">)</span> <span class="delimiter">{</span> <span class="comment">//urlからフェッチする場合</span>
+
+    <a href="#9210" title="=&gt; &lt;refinement&gt; extends java.lang.Object with org.scalatra.util.MultiMapHeadView[String,String] with org.scalatra.util.MapWithIndifferentAccess[String]">params</a>.<span title="(key: String)Option[String]">get</span><span class="delimiter">(</span><span title="java.lang.String(&quot;url&quot;)" class="string">&quot;url&quot;</span><span class="delimiter">)</span> <span title="Any" class="keyword">match</span> <span class="delimiter">{</span>
+      <span title="Any" class="keyword">case</span> Some<span class="delimiter">(</span><a title="String" id="22661">url</a><span class="delimiter">)</span> =&gt; <span class="delimiter">{</span>
+        <span class="keyword">val</span> <a title="Array[Byte]" id="22663">convertedData</a> = <a href="Source2html.scala.html#9237" title="object com.github.xuwei_k.Source2html">Source2html</a>.<a href="Source2html.scala.html#17121" title="(in: java.io.InputStream)Array[Byte]">sourceFiles2html</a><span class="delimiter">(</span><a href="FileService.scala.html#9191" title="object com.github.xuwei_k.FileService">FileService</a>.<a href="FileService.scala.html#16113" title="(url: String)java.net.HttpURLConnection">getConnection</a><span class="delimiter">(</span><a href="#22661" title="String">url</a><span class="delimiter">)</span>.<span title="()java.io.InputStream">getInputStream</span><span class="delimiter">)</span>
+
+        <span class="keyword">val</span> <a title="java.lang.String" id="22664">fileName</a> = <span title="java.lang.String(&quot;source&quot;)" class="string">&quot;source&quot;</span> <span class="comment">//todo 取得して設定</span>
+
+        <a href="#9210" title="=&gt; &lt;refinement&gt; extends java.lang.Object with org.scalatra.util.MultiMapHeadView[String,String] with org.scalatra.util.MapWithIndifferentAccess[String]">params</a>.<span title="(key: String)Option[String]">get</span><span class="delimiter">(</span><span title="java.lang.String(&quot;mail&quot;)" class="string">&quot;mail&quot;</span><span class="delimiter">)</span>.<span title="(f: (String) =&gt; Unit)Option[Unit]">map</span> <span class="delimiter">{</span> <a title="String" id="22702">address</a> =&gt;
+          <a href="MyMailService.scala.html#9228" title="object com.github.xuwei_k.MyMailService">MyMailService</a>.<a href="MyMailService.scala.html#22707" title="(sendAddress: String,attachments: com.google.appengine.api.mail.MailService.Attachment*)Unit">send</a><span class="delimiter">(</span><a href="#22702" title="String">address</a>, <span title="com.google.appengine.api.mail.MailService.Attachment" class="keyword">new</span> <span title="object com.google.appengine.api.mail.MailService">MailService</span>.<span title="com.google.appengine.api.mail.MailService.Attachment">Attachment</span><span class="delimiter">(</span><a href="#22664" title="(x$1: Any)java.lang.String">fileName</a> + <span title="java.lang.String(&quot;.txt&quot;)" class="string">&quot;.txt&quot;</span>, <a href="#22663" title="Array[Byte]">convertedData</a><span class="delimiter">)</span><span class="delimiter">)</span>
+        <span class="delimiter">}</span>
+
+        <span title="Any" class="keyword">if</span> <span class="delimiter">(</span><a href="#9210" title="=&gt; &lt;refinement&gt; extends java.lang.Object with org.scalatra.util.MultiMapHeadView[String,String] with org.scalatra.util.MapWithIndifferentAccess[String]">params</a>.<span title="(key: String)Option[String]">get</span><span class="delimiter">(</span><span title="java.lang.String(&quot;download&quot;)" class="string">&quot;download&quot;</span><span class="delimiter">)</span>.<span title="=&gt; Boolean">isDefined</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+          <a href="DownloadService.scala.html#9180" title="object com.github.xuwei_k.DownloadService">DownloadService</a>.<a href="DownloadService.scala.html#15568" title="(response: javax.servlet.http.HttpServletResponse,fileName: String,data: Array[Byte])Unit">download</a><span class="delimiter">(</span><a href="#9210" title="=&gt; javax.servlet.http.HttpServletResponse">response</a>, <a href="#22664" title="java.lang.String">fileName</a>, <a href="#22663" title="Array[Byte]">convertedData</a><span class="delimiter">)</span>
+        <span class="delimiter">}</span>
+      <span class="delimiter">}</span>
+
+      <span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#9210" title="=&gt; javax.servlet.http.HttpServletResponse">response</a>.<span title="(x$1: java.lang.String)Unit">sendRedirect</span><span class="delimiter">(</span><span title="java.lang.String(&quot;/index.html&quot;)" class="string">&quot;/index.html&quot;</span><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+  <span class="delimiter">}</span>
+
+  <span class="comment">/**
+   * requestから、uploadされたfileとパラメータを抽出
+   */</span>
+  <span class="keyword">def</span> <a title="()List[(String, java.io.InputStream)]" id="19745">getUploadFiles</a><span class="delimiter">(</span><span class="delimiter">)</span>:<span title="List[(String, java.io.InputStream)]">List</span><span class="delimiter">[</span>InputFile<span class="delimiter">]</span> = <span class="delimiter">{</span>
+	  
+	<span class="keyword">val</span> <a title="org.apache.commons.fileupload.FileItemIterator" id="23055">list</a> = <span title="org.apache.commons.fileupload.servlet.ServletFileUpload" class="keyword">new</span> <span title="org.apache.commons.fileupload.servlet.ServletFileUpload">ServletFileUpload</span><span class="delimiter">(</span><span class="delimiter">)</span>.<span title="(x$1: javax.servlet.http.HttpServletRequest)org.apache.commons.fileupload.FileItemIterator">getItemIterator</span><span class="delimiter">(</span><a href="#9210" title="=&gt; javax.servlet.http.HttpServletRequest">request</a><span class="delimiter">)</span>
+	
+    <a href="#19742" title="(ite: AnyRef{def next(): org.apache.commons.fileupload.FileItemStream; def hasNext(): Boolean})java.lang.Object with Iterator[org.apache.commons.fileupload.FileItemStream]">list</a>.<span title="(pf: PartialFunction[org.apache.commons.fileupload.FileItemStream,(String, java.io.InputStream)])Iterator[(String, java.io.InputStream)]">collect</span><a href="#23476" title="(String, java.io.InputStream)" class="delimiter">{</a><span title="(String, java.io.InputStream)" class="keyword">case</span> <a title="org.apache.commons.fileupload.FileItemStream" id="23477">f</a> <span class="keyword">if</span> <span title="=&gt; Boolean">!</span><a href="#23477" title="org.apache.commons.fileupload.FileItemStream">f</a>.<span title="()Boolean">isFormField</span> =&gt; <a href="#19747" title="(in: org.apache.commons.fileupload.FileItemStream)(String, java.io.InputStream)">getUploadFile</a><span class="delimiter">(</span><a href="#23477" title="org.apache.commons.fileupload.FileItemStream">f</a><span class="delimiter">)</span> <span class="delimiter">}</span>.<span title="=&gt; List[(String, java.io.InputStream)]">toList</span>
+  <span class="delimiter">}</span>
+  
+  <span class="keyword">type</span> <a title="(String, java.io.InputStream)" id="19746">InputFile</a> = <span title="(String, java.io.InputStream)" class="delimiter">(</span>String,InputStream<span class="delimiter">)</span> <span class="comment">//todo classにする？</span>
+  
+  <span class="keyword">def</span> <a title="(in: org.apache.commons.fileupload.FileItemStream)(String, java.io.InputStream)" id="19747">getUploadFile</a><span class="delimiter">(</span><a title="org.apache.commons.fileupload.FileItemStream" id="23479">in</a>:<span title="org.apache.commons.fileupload.FileItemStream">FileItemStream</span><span class="delimiter">)</span>:<span title="(String, java.io.InputStream)">InputFile</span> = <span class="delimiter">{</span>
+    <span class="keyword">val</span> <a title="java.io.InputStream" id="23484">stream</a> = <a href="#23479" title="org.apache.commons.fileupload.FileItemStream">in</a>.<span title="()java.io.InputStream">openStream</span>
+	<span class="keyword">val</span> <a title="java.io.ByteArrayOutputStream" id="23485">out</a> = <span title="java.io.ByteArrayOutputStream" class="keyword">new</span> <span title="java.io.ByteArrayOutputStream">ByteArrayOutputStream</span>
+    <span class="keyword">val</span> <a title="java.lang.String" id="23486">fileName</a> = <a href="#23479" title="org.apache.commons.fileupload.FileItemStream">in</a>.<span title="()java.lang.String">getName</span>
+
+    <span class="keyword">var</span> <a title="Int" id="23487">len</a> = <span title="Int(0)" class="int">0</span>
+    <span class="keyword">val</span> <a title="Array[Byte]" id="23488">buf</a> = <span title="Array[Byte]" class="keyword">new</span> <span title="Array[Byte]">Array</span><span class="delimiter">[</span>Byte<span class="delimiter">]</span><span class="delimiter">(</span><span class="int">1024</span> <span title="Int(1048576)">*</span> <span class="int">1024</span><span class="delimiter">)</span>
+    <span title="Unit" class="keyword">while</span> <span class="delimiter">(</span><span title="(x$1: Int)Boolean" class="delimiter">{</span> <a href="#23487" title="Int">len</a> = <a href="#23484" title="java.io.InputStream">stream</a>.<span title="(x$1: Array[Byte],x$2: Int,x$3: Int)Int">read</span><span class="delimiter">(</span><a href="#23488" title="Array[Byte]">buf</a>, <span title="Int(0)" class="int">0</span>, <a href="#23488" title="Array[Byte]">buf</a>.<span title="=&gt; Int">length</span><span class="delimiter">)</span>; <a href="#23487" title="Int">len</a> <span class="delimiter">}</span> != <span title="Int(-1)">-</span><span class="int">1</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+      <a href="#23485" title="java.io.ByteArrayOutputStream">out</a>.<span title="(x$1: Array[Byte],x$2: Int,x$3: Int)Unit">write</span><a href="#23489" title="()Unit" class="delimiter">(</a><a href="#23488" title="Array[Byte]">buf</a>, <span title="Int(0)" class="int">0</span>, <a href="#23487" title="Int">len</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+    <span title="(_1: java.lang.String,_2: java.io.ByteArrayInputStream)(java.lang.String, java.io.ByteArrayInputStream)" class="delimiter">(</span><a href="#23486" title="java.lang.String">fileName</a>, <span title="java.io.ByteArrayInputStream" class="keyword">new</span> <span title="java.io.ByteArrayInputStream">ByteArrayInputStream</span><span class="delimiter">(</span><a href="#23485" title="java.io.ByteArrayOutputStream">out</a>.<span title="()Array[Byte]">toByteArray</span><span class="delimiter">)</span><span class="delimiter">)</span>
+  <span class="delimiter">}</span>
+
+  <span class="comment">/**
+   * 変換後のファイルを、mailまたは、responseとして転送
+   * @param name
+   * @param data
+   */</span>
+  <span class="keyword">def</span> <a title="(name: String,data: Array[Byte])Unit" id="19748">transferData</a><span class="delimiter">(</span><a title="String" id="24034">name</a>: <span title="String">String</span>, <a title="Array[Byte]" id="24035">data</a>: <span title="Array[Byte]">Array</span><span class="delimiter">[</span>Byte<span class="delimiter">]</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+	 
+    <span title="Unit" class="keyword">if</span> <span class="delimiter">(</span><a href="#9210" title="=&gt; &lt;refinement&gt; extends java.lang.Object with org.scalatra.util.MultiMapHeadView[String,String] with org.scalatra.util.MapWithIndifferentAccess[String]">params</a>.<span title="(key: String)Boolean">isDefinedAt</span><span title="(x$1: Boolean)Boolean" class="delimiter">(</span><span title="java.lang.String(&quot;mail&quot;)" class="string">&quot;mail&quot;</span><span class="delimiter">)</span> &amp;&amp; <a href="#9210" title="=&gt; &lt;refinement&gt; extends java.lang.Object with org.scalatra.util.MultiMapHeadView[String,String] with org.scalatra.util.MapWithIndifferentAccess[String]">params</a>.<span title="(key: String)Boolean">isDefinedAt</span><span class="delimiter">(</span><span title="java.lang.String(&quot;mail_address&quot;)" class="string">&quot;mail_address&quot;</span><span class="delimiter">)</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+      <a href="MyMailService.scala.html#9228" title="object com.github.xuwei_k.MyMailService">MyMailService</a>.<a href="MyMailService.scala.html#22707" title="(sendAddress: String,attachments: com.google.appengine.api.mail.MailService.Attachment*)Unit">send</a><span class="delimiter">(</span><a href="#9210" title="(key: String)String">params</a><span class="delimiter">(</span><span title="java.lang.String(&quot;mail_address&quot;)" class="string">&quot;mail_address&quot;</span><span class="delimiter">)</span>, <span title="com.google.appengine.api.mail.MailService.Attachment" class="keyword">new</span> <span title="object com.google.appengine.api.mail.MailService">MailService</span>.<span title="com.google.appengine.api.mail.MailService.Attachment">Attachment</span><span class="delimiter">(</span><a href="#24034" title="(x$1: Any)java.lang.String">name</a> + <span title="java.lang.String(&quot;.txt&quot;)" class="string">&quot;.txt&quot;</span>, <a href="#24035" title="Array[Byte]">data</a><span class="delimiter">)</span><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+
+    <span title="Unit" class="keyword">if</span> <span class="delimiter">(</span><a href="#9210" title="=&gt; &lt;refinement&gt; extends java.lang.Object with org.scalatra.util.MultiMapHeadView[String,String] with org.scalatra.util.MapWithIndifferentAccess[String]">params</a>.<span title="(key: String)Boolean">isDefinedAt</span><span class="delimiter">(</span><span title="java.lang.String(&quot;download&quot;)" class="string">&quot;download&quot;</span><span class="delimiter">)</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+      <a href="DownloadService.scala.html#9180" title="object com.github.xuwei_k.DownloadService">DownloadService</a>.<a href="DownloadService.scala.html#15568" title="(response: javax.servlet.http.HttpServletResponse,fileName: String,data: Array[Byte])Unit">download</a><span class="delimiter">(</span><a href="#9210" title="=&gt; javax.servlet.http.HttpServletResponse">response</a>, <a href="#24034" title="String">name</a>, <a href="#24035" title="Array[Byte]">data</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span><span class="keyword">else</span><span class="delimiter">{</span>
+      <a href="#9210" title="(uri: String)Unit">redirect</a><span class="delimiter">(</span><span title="java.lang.String(&quot;/&quot;)" class="string">&quot;/&quot;</span><span class="delimiter">)</span>	
+    <span class="delimiter">}</span>
+  <span class="delimiter">}</span>
+
+  <a href="#9210" title="(routeMatchers: org.scalatra.RouteMatcher*)(action: =&gt; Any)org.scalatra.Route">post</a><span class="delimiter">(</span><a href="#9210" title="implicit org.scalatra.ScalatraKernel.string2RouteMatcher : (path: String)org.scalatra.RouteMatcher" class="string">&quot;/file_upload&quot;</a><span class="delimiter">)</span> <span class="delimiter">{</span> <span class="comment">//Userが自分のfileをuploadした場合</span>
+
+    <span class="keyword">val</span> <a title="List[(String, java.io.InputStream)]" id="24080">files</a> = <a href="#19745" title="()List[(String, java.io.InputStream)]">getUploadFiles</a> <span class="comment">//uploadされたファイル取得</span>
+
+    <span title="Any" class="keyword">if</span><span class="delimiter">(</span><span title="(x$1: Boolean)Boolean">!</span> <a href="#24080" title="List[(String, java.io.InputStream)]">files</a>.<span title="=&gt; Boolean">isEmpty</span> &amp;&amp; <a href="#24080" title="List[(String, java.io.InputStream)]">files</a>.<span title="=&gt; (String, java.io.InputStream)">head</span>.<span title="=&gt; String">_1</span>.<span title="(x$1: Int)Boolean">length</span> &gt; <span title="Int(0)" class="int">0</span><span class="delimiter">)</span><span class="delimiter">{</span>
+
+      <span class="keyword">val</span> <a title="(String, java.io.InputStream)" id="24235">f</a> = <a href="#24080" title="List[(String, java.io.InputStream)]">files</a>.<span title="=&gt; (String, java.io.InputStream)">head</span> <span class="comment">//todo 複数ファイル対応</span>
+      <span class="keyword">val</span> <a title="Array[Byte]" id="24236">convertedData</a> = <a href="Source2html.scala.html#9237" title="object com.github.xuwei_k.Source2html">Source2html</a>.<a href="Source2html.scala.html#17121" title="(in: java.io.InputStream)Array[Byte]">sourceFiles2html</a><span class="delimiter">(</span> <a href="#24235" title="(String, java.io.InputStream)">f</a>.<span title="=&gt; java.io.InputStream">_2</span> <span class="delimiter">)</span> <span class="comment">//変換</span>
+
+      <a href="#19748" title="(name: String,data: Array[Byte])Unit">transferData</a><span class="delimiter">(</span> <a href="#24235" title="(String, java.io.InputStream)">f</a>.<span title="=&gt; String">_1</span> ,<a href="#24236" title="Array[Byte]">convertedData</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+  <span class="delimiter">}</span>
+
+  <a href="#9210" title="(routeMatchers: org.scalatra.RouteMatcher*)(action: =&gt; Any)org.scalatra.Route">post</a><span class="delimiter">(</span><a href="#9210" title="implicit org.scalatra.ScalatraKernel.string2RouteMatcher : (path: String)org.scalatra.RouteMatcher" class="string">&quot;/_ah/mail/*&quot;</a><span class="delimiter">)</span> <span class="delimiter">{</span> <span class="comment">//mailを受信して、そのまま返信するテスト</span>
+    <span class="keyword">import</span> javax.mail.<span class="delimiter">{</span> Session <span class="delimiter">}</span>
+    <span class="keyword">import</span> javax.mail.internet.MimeMessage
+    <span class="keyword">import</span> com.google.appengine.api.mail.<span class="delimiter">{</span> MailService <span class="delimiter">}</span>
+
+    <span class="keyword">val</span> <a title="javax.mail.Session" id="24260">s</a> = <span title="object javax.mail.Session">Session</span>.<span title="(x$1: java.util.Properties)javax.mail.Session">getInstance</span><span class="delimiter">(</span><span title="object java.lang.System">System</span>.<span title="()java.util.Properties">getProperties</span><span class="delimiter">)</span>
+    <span class="keyword">val</span> <a title="javax.mail.internet.MimeMessage" id="24261">msg</a> = <span title="(x$1: javax.mail.Session,x$2: java.io.InputStream)javax.mail.internet.MimeMessage" class="keyword">new</span> <span title="javax.mail.internet.MimeMessage">MimeMessage</span><span class="delimiter">(</span><a href="#24260" title="javax.mail.Session">s</a>, <a href="#9210" title="=&gt; javax.servlet.http.HttpServletRequest">request</a>.<span title="()javax.servlet.ServletInputStream">getInputStream</span><span class="delimiter">)</span>
+
+    <span class="keyword">val</span> <a title="java.lang.String" id="24262">senderAddress</a> = <a href="#24261" title="javax.mail.internet.MimeMessage">msg</a>.<span title="()Array[javax.mail.Address]">getFrom</span>.<span title="(i: Int)javax.mail.Address">apply</span><span class="delimiter">(</span><span title="Int(0)" class="int">0</span><span class="delimiter">)</span>.<span title="()java.lang.String">toString</span> <span class="comment">//メールを送ってきた人のアドレス</span>
+
+    <span class="comment">//添付ファイルを取得して、それぞれ変換</span>
+    <span class="keyword">val</span> <a title="List[com.google.appengine.api.mail.MailService.Attachment]" id="24263">attachments</a> =
+      <a href="MyMailService.scala.html#9228" title="object com.github.xuwei_k.MyMailService">MyMailService</a>.<a href="MyMailService.scala.html#22708" title="(part: javax.mail.Part,list: List[com.github.xuwei_k.MyMailService.Attachment])List[com.github.xuwei_k.MyMailService.Attachment]">partAnalysis</a><span class="delimiter">(</span><a href="#24261" title="javax.mail.internet.MimeMessage">msg</a>, <span title="object Nil">Nil</span><span class="delimiter">)</span>.<span title="(f: (com.github.xuwei_k.MyMailService.Attachment) =&gt; com.google.appengine.api.mail.MailService.Attachment)(implicit bf: scala.collection.generic.CanBuildFrom[List[com.github.xuwei_k.MyMailService.Attachment],com.google.appengine.api.mail.MailService.Attachment,List[com.google.appengine.api.mail.MailService.Attachment]])List[com.google.appengine.api.mail.MailService.Attachment]">map</span> <span title="scala.collection.generic.CanBuildFrom[scala.collection.immutable.List.Coll,com.google.appengine.api.mail.MailService.Attachment,List[com.google.appengine.api.mail.MailService.Attachment]]" class="delimiter">{</span> <a title="com.github.xuwei_k.MyMailService.Attachment" id="25372">file</a> =&gt;
+        <span title="com.google.appengine.api.mail.MailService.Attachment" class="keyword">new</span> <span title="object com.google.appengine.api.mail.MailService">MailService</span>.<span title="com.google.appengine.api.mail.MailService.Attachment">Attachment</span><span class="delimiter">(</span>
+          <a href="#25372" title="com.github.xuwei_k.MyMailService.Attachment">file</a>.<a href="MyMailService.scala.html#25342" title="(x$1: Any)java.lang.String">name</a> + <span title="java.lang.String(&quot;.txt&quot;)" class="string">&quot;.txt&quot;</span>, <span class="comment">//zipだと、GAEの制限で送れないので、騙して送る</span>
+          <a href="Source2html.scala.html#9237" title="object com.github.xuwei_k.Source2html">Source2html</a>.<a href="Source2html.scala.html#17121" title="(in: java.io.InputStream)Array[Byte]">sourceFiles2html</a><span class="delimiter">(</span><a href="#25372" title="com.github.xuwei_k.MyMailService.Attachment">file</a>.<a href="MyMailService.scala.html#25344" title="=&gt; java.io.InputStream">data</a><span class="delimiter">)</span><span class="delimiter">)</span>
+      <span class="delimiter">}</span>
+
+    <a href="MyMailService.scala.html#9228" title="object com.github.xuwei_k.MyMailService">MyMailService</a>.<a href="MyMailService.scala.html#22707" title="(sendAddress: String,attachments: com.google.appengine.api.mail.MailService.Attachment*)Unit">send</a><span class="delimiter">(</span><a href="#24262" title="java.lang.String">senderAddress</a>, <a href="#24263" title="List[com.google.appengine.api.mail.MailService.Attachment]">attachments</a>: _*<span class="delimiter">)</span>
+  <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+
+        </pre>
+    </body>
+</html>
