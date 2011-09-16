@@ -5,6 +5,8 @@ object BuildGAE extends Build{
 
   val gaeSDK = "1.5.2"
 
+  val sourceCount = TaskKey[Unit]("source-count")
+
   lazy val root = Project("syntax-highlight", file("."),
     settings = {
       Defaults.defaultSettings ++ 
@@ -24,6 +26,12 @@ object BuildGAE extends Build{
            ,"xuwei-k repo" at "http://xuwei-k.github.com/mvn"
          )
         ,addCompilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.8-SNAPSHOT")
+        ,sourceCount <<= ( sources in Compile , sources in Test ) map{ (main,test) =>
+           println{
+             "\nmain " + main.map{f => IO.readLines(f).size}.sum +
+             "\ntest " + test.map{f => IO.readLines(f).size}.sum
+           }
+        }
       )
     }
   )
