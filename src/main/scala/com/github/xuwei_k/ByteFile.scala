@@ -33,7 +33,6 @@ case class ByteFile(val name: String, originalData: Array[Byte]) {
 
   /** そのファイルが含まれているdirectory名 */
   lazy val parentDir: ZipUtil.Dir = name.reverse.dropWhile(_ != '/').reverse
-  
-  
+
 }
 

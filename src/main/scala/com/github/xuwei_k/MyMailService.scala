@@ -2,7 +2,6 @@ package com.github.xuwei_k
 
 import java.io._
 import java.util.Properties;
-
 import javax.mail._
 import javax.mail.internet._
 import javax.mail.util._

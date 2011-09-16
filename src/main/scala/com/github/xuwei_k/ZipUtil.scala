@@ -4,9 +4,7 @@ import java.io._
 import scala.collection.{ mutable => mu }
 import Using._
 
-/**
- * zipの処理に関するutility
- * @since 2011/03/23 2:47:11
+/** zipの処理に関するutility
  */
 object ZipUtil {
 

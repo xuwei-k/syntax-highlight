@@ -6,7 +6,6 @@ import scala.collection.{mutable => mu }
 import Using._
 
 /** source fileをhtmlに変換する処理
- * @since 2011/03/23 2:59:18
  */
 object Source2html {
 
@@ -15,7 +14,7 @@ object Source2html {
     fType.map{_.jsFile} ++ Seq("sh_main.js","sh_style.css").map{ f =>
       ByteFile(f , fileToByteArray("./resource/" + f))
     }
-	
+
   /** ファイルをbyte配列にして返す
    */
   def fileToByteArray(fileName:String):Array[Byte] = {
@@ -27,7 +26,7 @@ object Source2html {
     }
     buf
   }
-  
+
   /**
    * @param in zipになってるsource file
    * @param out 作成したzipの出力先
@@ -36,15 +35,15 @@ object Source2html {
     val files = ZipUtil.extractFileList( in )
 
     val map = ZipUtil.getFileMap( files )
-    
+
     for{
       (dir,fileTypes) <- map
       f <- addFiles(fileTypes.toSeq:_*)
     }(files += f.copy(name = {dir + f.name}))
-    
+
     ZipUtil.encode(new ZipOutputStream( out ), files )
   }
-  
+
   def sourceFiles2html(in:InputStream):Array[Byte] = {
     val out = new java.io.ByteArrayOutputStream
     Source2html.sourceFiles2html( in ,out)

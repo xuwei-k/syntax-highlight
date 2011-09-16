@@ -7,11 +7,11 @@ object Using {
     }finally {
       closer(resource)
     }
-  
+
   trait Closer[-A] {
     def apply(resource: A)
   }
- 
+
   object Closer {
     def apply[A](f: A => Unit) = new Closer[A] {
       def apply(resource: A) = f(resource) 

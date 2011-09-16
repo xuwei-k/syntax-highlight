@@ -10,17 +10,15 @@ import com.google.appengine.api.mail.{ MailService }
 
 /**
  * request の urlによって処理振り分ける
- * @author kenji
- *
  */
 class Front extends ScalatraFilter {
-	
-	
- implicit def toScalaIterator[A](ite:{def next():A;def hasNext():Boolean}) =
-  new Iterator[A]{
-    def next = ite.next
-    def hasNext = ite.hasNext
-  }
+
+  implicit def toScalaIterator[A](ite:{def next():A;def hasNext():Boolean}) =
+    new Iterator[A]{
+      def next = ite.next
+      def hasNext = ite.hasNext
+    }
+
 
   get("/*") {
     "hello"
@@ -51,17 +49,17 @@ class Front extends ScalatraFilter {
    * requestから、uploadされたfileとパラメータを抽出
    */
   def getUploadFiles():List[InputFile] = {
-	  
-	val list = new ServletFileUpload().getItemIterator(request)
-	
+
+    val list = new ServletFileUpload().getItemIterator(request)
+
     list.collect{case f if !f.isFormField => getUploadFile(f) }.toList
   }
-  
+
   type InputFile = (String,InputStream) //todo classにする？
-  
+
   def getUploadFile(in:FileItemStream):InputFile = {
     val stream = in.openStream
-	val out = new ByteArrayOutputStream
+    val out = new ByteArrayOutputStream
     val fileName = in.getName
 
     var len = 0
@@ -78,7 +76,7 @@ class Front extends ScalatraFilter {
    * @param data
    */
   def transferData(name: String, data: Array[Byte]) {
-	 
+
     if (params.isDefinedAt("mail") && params.isDefinedAt("mail_address")) {
       MyMailService.send(params("mail_address"), new MailService.Attachment(name + ".txt", data))
     }
