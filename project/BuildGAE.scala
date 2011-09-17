@@ -5,7 +5,8 @@ object BuildGAE extends Build{
 
   val gaeSDK = "1.5.2"
 
-  val sourceCount = TaskKey[Unit]("source-count")
+  val sourceCount    = TaskKey[Unit]("source-count")
+  val createSxrSlide = TaskKey[Unit]("create-sxr-slide")
 
   lazy val root = Project("syntax-highlight", file("."),
     settings = {
@@ -32,7 +33,24 @@ object BuildGAE extends Build{
              "\ntest " + test.map{f => IO.readLines(f).size}.sum
            }
         }
+        ,createSxrSlide <<= ( sources in Compile , sources in Test ) map{ (main,test) =>
+          Seq(main -> "main" ,test -> "test" ).foreach{ case (files,n) =>
+            IO.write( file(n) , create(SxrBaseURL + n,files.map{_.toString}) )
+          }
+        }
       )
     }
   )
+
+  val SxrBaseURL = "http://xuwei-k.github.com/syntax-highlight/"
+
+  def dom(src:String,w:Int,h:Int):xml.Elem = {
+    <iframe src={src} width={w.toString} height={h.toString} />
+  }
+
+  def create(baseURL:String,files:Seq[String],w:Int = 1200,h:Int = 600):String = {
+    files.map{ f =>
+      "\n\n!SLIDE\n\n" + dom( baseURL + f , w , h )
+    }.mkString
+  }
 }
