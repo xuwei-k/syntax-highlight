@@ -2,17 +2,20 @@ package com.github.xuwei_k
 
 object HtmlData {
 
-  def header(fileType:String) = 
+  private[this] def header(t:FileType):Array[Byte] = { 
+   val n = t.name
+
    {"""<html>
     <head>
     <link type="text/css" rel="stylesheet" href="sh_style.css">
     <script type="text/javascript" src="sh_main.js"></script>
-    <script type="text/javascript" src="sh_"""+ fileType +""".js"></script>
+    <script type="text/javascript" src="sh_"""+ n +""".js"></script>
     </head>
     <body onload="sh_highlightDocument();">
-    <pre class="sh_""" + fileType + """">"""}.getBytes
+    <pre class="sh_""" + n + """">"""}.getBytes
+  }
 
-  private lazy val footer = 
+  private[this] lazy val footer = 
     """
     </pre>
     </body>
@@ -21,12 +24,13 @@ object HtmlData {
 
   /**
    */
-  def convertHtml(data:Array[Byte],fileType:String):Array[Byte] = {
-    header(fileType) ++ escapeHtml(data) ++ footer
+  def convertHtml(data:Array[Byte],t:FileType):Array[Byte] = {
+    header(t) ++ escapeHtml(data) ++ footer
   }
 
   val REPLACE = io.Codec("UTF-8").onMalformedInput(java.nio.charset.CodingErrorAction.REPLACE)
 
+  // TODO side effect だらけで汚いｪ・・・(´・ω・｀)
   def escapeHtml(data:Array[Byte]):Array[Byte] = {
     val buf = new StringBuilder
 
@@ -36,7 +40,7 @@ object HtmlData {
         case '<' => buf append "&lt;"
         case '>' => buf append "&gt;"
         case '"' => buf append "&quot;"
-        case _ => buf append c
+        case _   => buf append c
       }}
     }
 

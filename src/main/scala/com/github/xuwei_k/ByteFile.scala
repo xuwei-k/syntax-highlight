@@ -11,9 +11,9 @@ case class ByteFile(val name: String, originalData: Array[Byte]) {
 
   /** (変換できるならば)変換後のbinaryのデータ */
   lazy val data =
-    if (isSupport) {
-      HtmlData.convertHtml(originalData, fileType.get.name)
-    } else {
+    fileType.map{ fType =>
+      HtmlData.convertHtml(originalData, fType)
+    }.getOrElse{
       originalData
     }
 
