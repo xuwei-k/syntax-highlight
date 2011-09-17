@@ -35,7 +35,7 @@ object BuildGAE extends Build{
         }
         ,createSxrSlide <<= ( sources in Compile , sources in Test ) map{ (main,test) =>
           Seq(main -> "main" ,test -> "test" ).foreach{ case (files,n) =>
-            IO.write( file(n) , create(SxrBaseURL + n,files.map{_.toString}) )
+            IO.write( file("slide") / n , create(SxrBaseURL + n + "/",files.map{_.getName}) )
           }
         }
       )
