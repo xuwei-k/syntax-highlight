@@ -32,17 +32,9 @@ object HtmlData {
 
   // TODO side effect だらけで汚いｪ・・・(´・ω・｀)
   def escapeHtml(data:Array[Byte]):Array[Byte] = {
-    val buf = new StringBuilder
+    import scala.xml.Utility.escape
 
-    io.Source.fromBytes(data)(REPLACE).foreach{c =>
-      {( c : @annotation.switch) match{
-        case '&' => buf append "&amp;"
-        case '<' => buf append "&lt;"
-        case '>' => buf append "&gt;"
-        case '"' => buf append "&quot;"
-        case _   => buf append c
-      }}
-    }
+    val buf = escape( io.Source.fromBytes(data)(REPLACE).mkString ,new StringBuilder )
 
     val ite = io.Source.fromString( buf.toString ).getLines.zipWithIndex
 //ここから
