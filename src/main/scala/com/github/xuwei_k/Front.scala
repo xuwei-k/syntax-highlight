@@ -101,7 +101,7 @@ class Front extends ScalatraFilter {
     }
   }
 
-  post("/_ah/mail/*") { //mailを受信して、そのまま返信するテスト
+  post("/_ah/mail/*") { //mailを受信して、メールで返信
     import javax.mail.{ Session }
     import javax.mail.internet.MimeMessage
     import com.google.appengine.api.mail.{ MailService }

@@ -15,14 +15,13 @@ object MyMailService {
   case class Attachment(name:String,data:InputStream)
 
   /** メール送信
-   *
    */
   def send(sendAddress:String,attachments:MailService.Attachment *){
 
     //なにかしら、本文に文字を入れないと、送信できないらしい!!!
     val message = new MailService.Message( "test1@xuwei-k.appspotmail.com" , sendAddress ,"test" , "body" )
-      message.setAttachments(attachments:_*)
-      MailServiceFactory.getMailService.send(message)
+    message.setAttachments(attachments:_*)
+    MailServiceFactory.getMailService.send(message)
   }
 
   /**
@@ -33,7 +32,6 @@ object MyMailService {
     if (part.isMimeType("multipart/*")) {
 
       val content = part.getContent.asInstanceOf[Multipart]
-
       // 含まれるパートを再帰的に処理
       list ++ {
         (0 until content.getCount).map{
