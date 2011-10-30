@@ -4,6 +4,6 @@
 
 * http://syntax-highlight.appspot.com
 
-* Sxr http://xuwei-k.github.com/syntax-highlight/
+* Sxr http://xuwei-k.github.com/syntax-highlight/main
 
 * http://shjs.sourceforge.net/
