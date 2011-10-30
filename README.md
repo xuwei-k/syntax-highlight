@@ -6,3 +6,4 @@
 
 * Sxr http://xuwei-k.github.com/syntax-highlight/
 
+* http://shjs.sourceforge.net/
