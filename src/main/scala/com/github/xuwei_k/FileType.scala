@@ -10,7 +10,7 @@ final case class FileType private(val name:String,extensions:String*){
 
   instances += this //mapに保持
 
-  private[this] lazy val jsFileName = "sh_%s.js" format name 
+  private[this] lazy val jsFileName = "sh_%s.js" format name
 
   lazy val jsFile:ByteFile =
     ByteFile(jsFileName,Source2html.fileToByteArray("resource/" + jsFileName))
@@ -50,7 +50,7 @@ object FileType{
   val properties = FileType("properties")
   val python = FileType("python","py")
   val ruby = FileType("ruby","rb")
-  val scala = FileType("scala","scala")
+  val scala = FileType("scala","scala","sbt")
   val sh = FileType("sh","sh")
   val slang = FileType("slang")
   val sml = FileType("sml")
@@ -58,17 +58,17 @@ object FileType{
   val sql = FileType("sql","sql")
   val tcl = FileType("tcl")
   val url = FileType("url")
-//  val xml = FileType("xml","xml") // todo えんこーどする 
+//  val xml = FileType("xml","xml") // todo えんこーどする
   val xorg = FileType("xorg")
 
   private lazy val instances = new mutable.HashSet[FileType]()
 
   lazy val allExtentions = name2FileType.keys.toSet
 
-  private lazy val name2FileType:Map[String,FileType] = 
+  private lazy val name2FileType:Map[String,FileType] =
     instances.flatMap{ f =>
       f.extensions.map{
-        _ -> f 
+        _ -> f
       }
     }.toMap
 

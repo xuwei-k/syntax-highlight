@@ -19,7 +19,7 @@ object MyMailService {
   def send(sendAddress:String,attachments:MailService.Attachment *){
 
     //なにかしら、本文に文字を入れないと、送信できないらしい!!!
-    val message = new MailService.Message( "test1@xuwei-k.appspotmail.com" , sendAddress ,"test" , "body" )
+    val message = new MailService.Message( "test1@syntax-highlight.appspotmail.com" , sendAddress ,"test" , "body" )
     message.setAttachments(attachments:_*)
     MailServiceFactory.getMailService.send(message)
   }
