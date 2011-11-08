@@ -23,7 +23,7 @@ javascript: (
   add("mail_address", "your mail address" );
   add("mail", "on" );
   add("download", "on" );
-  add("url", url   "/zipball/master" );
+  add("url", url + "/zipball/master" );
   form.setAttribute("action" ,"http://syntax-highlight.appspot.com/source.zip" );
   form.setAttribute("method" ,"post" );
   document.body.appendChild( form );
