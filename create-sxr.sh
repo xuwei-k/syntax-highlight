@@ -1,17 +1,14 @@
-git pull
+sbt11 test:compile
 
-sbt10 compile
+cd ../gh-pages
 
-rm -rf ../gh-pages/main/*
-rm -rf ../gh-pages/test/*
+# git pull origin gh-pages
 
-cp target/scala-2.9.1.final/classes.sxr/* ../gh-pages/main/
+rm -rf ./main/*
+rm -rf ./test/*
 
-cp target/scala-2.9.1.final/test-classes.sxr/* ../gh-pages/test/
-
-cd ../gh-pages/
-
-git pull
+cp ../master/target/scala-2.9.1/classes.sxr/* ./main/
+cp ../master/target/scala-2.9.1/test-classes.sxr/* ./test/
 
 git add \*.html
 
