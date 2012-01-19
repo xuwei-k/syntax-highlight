@@ -2,11 +2,12 @@ package com.github.xuwei_k
 
 object HtmlData {
 
-  private[this] def header(t:FileType):Array[Byte] = { 
+  private[this] def header(t:FileType):Array[Byte] = {
    val n = t.name
 
    {"""<html>
     <head>
+    <meta name="format-detection" content="telephone=no" />
     <link type="text/css" rel="stylesheet" href="sh_style.css">
     <script type="text/javascript" src="sh_main.js"></script>
     <script type="text/javascript" src="sh_"""+ n +""".js"></script>
@@ -15,7 +16,7 @@ object HtmlData {
     <pre class="sh_""" + n + """">"""}.getBytes
   }
 
-  private[this] lazy val footer = 
+  private[this] lazy val footer =
     """
     </pre>
     </body>
