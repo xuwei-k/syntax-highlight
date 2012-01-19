@@ -10,17 +10,18 @@ object BuildGAE extends Build{
 
   lazy val root = Project("syntax-highlight", file("."),
     settings = {
-      Defaults.defaultSettings ++ 
-      sbtappengine.AppenginePlugin.webSettings ++ 
+      Defaults.defaultSettings ++
+      sbtappengine.Plugin.appengineSettings ++
       Seq(
-        scalaVersion := "2.9.1", 
+        scalaVersion := "2.9.1",
         libraryDependencies ++= Seq(
-           "javax.servlet" % "servlet-api" % "2.5"
+           "org.eclipse.jetty" % "jetty-webapp" % "7.4.5.v20110725" % "container"
+          ,"javax.servlet" % "servlet-api" % "2.5" % "provided"
           ,"commons-fileupload" % "commons-fileupload" % "1.2.2"
-          ,"com.google.appengine" % "appengine-java-sdk" % gaeSDK 
-          ,"com.google.appengine" % "appengine-api-1.0-sdk" % gaeSDK 
-          ,"net.kindleit" % "gae-runtime" % gaeSDK 
-          ,"org.scalatra" %% "scalatra" % "2.0.0"
+          ,"com.google.appengine" % "appengine-java-sdk" % gaeSDK
+          ,"com.google.appengine" % "appengine-api-1.0-sdk" % gaeSDK
+          ,"net.kindleit" % "gae-runtime" % gaeSDK
+          ,"org.scalatra" %% "scalatra" % "2.0.2"
         )
         ,resolvers ++= Seq(
             "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
