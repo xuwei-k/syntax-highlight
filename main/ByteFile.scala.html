@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
@@ -19,33 +19,33 @@
  * @param name fileの名前
  * @param data fileの中身
  */</span>
-case <span class="keyword">class</span> <a title="class ByteFile extends java.lang.Object with ScalaObject with Product with Serializable" id="22692">ByteFile</a><a href="#22692" title="ScalaObject" class="delimiter">(</a><span class="keyword">val</span> <a title="String" id="22687">name</a>: <span title="String">String</span>, <a title="Array[Byte]" id="22688">originalData</a>: <span title="Array[Byte]">Array</span><span class="delimiter">[</span>Byte<span class="delimiter">]</span><span class="delimiter">)</span> <span class="delimiter">{</span>
-  <span class="keyword">import</span> <a href="#22692" title="object com.github.xuwei_k.ByteFile">ByteFile</a>._
+case <span class="keyword">class</span> <a title="class ByteFile extends java.lang.Object with ScalaObject with Product with Serializable" id="22671">ByteFile</a><a href="#22671" title="ScalaObject" class="delimiter">(</a><span class="keyword">val</span> <a title="String" id="22666">name</a>: <span title="String">String</span>, <a title="Array[Byte]" id="22667">originalData</a>: <span title="Array[Byte]">Array</span><span class="delimiter">[</span>Byte<span class="delimiter">]</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+  <span class="keyword">import</span> <a href="#22671" title="object com.github.xuwei_k.ByteFile">ByteFile</a>._
 
   <span class="comment">/** (変換できるならば)変換後のbinaryのデータ */</span>
-  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Array[Byte]" id="9564">data</a> =
-    <a href="#9569" title="=&gt; Option[com.github.xuwei_k.FileType]">fileType</a>.<span title="(f: com.github.xuwei_k.FileType =&gt; Array[Byte])Option[Array[Byte]]">map</span><span class="delimiter">{</span> <a title="com.github.xuwei_k.FileType" id="10333">fType</a> =&gt;
-      <a href="HtmlData.scala.html#9525" title="object com.github.xuwei_k.HtmlData">HtmlData</a>.<a href="HtmlData.scala.html#10350" title="(data: Array[Byte], t: com.github.xuwei_k.FileType)Array[Byte]">convertHtml</a><span class="delimiter">(</span><a href="#22688" title="=&gt; Array[Byte]">originalData</a>, <a href="#10333" title="com.github.xuwei_k.FileType">fType</a><span class="delimiter">)</span>
+  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Array[Byte]" id="9554">data</a> =
+    <a href="#9559" title="=&gt; Option[com.github.xuwei_k.FileType]">fileType</a>.<span title="(f: com.github.xuwei_k.FileType =&gt; Array[Byte])Option[Array[Byte]]">map</span><span class="delimiter">{</span> <a title="com.github.xuwei_k.FileType" id="10323">fType</a> =&gt;
+      <a href="HtmlData.scala.html#9496" title="object com.github.xuwei_k.HtmlData">HtmlData</a>.<a href="HtmlData.scala.html#10340" title="(data: Array[Byte], t: com.github.xuwei_k.FileType)Array[Byte]">convertHtml</a><span class="delimiter">(</span><a href="#22667" title="=&gt; Array[Byte]">originalData</a>, <a href="#10323" title="com.github.xuwei_k.FileType">fType</a><span class="delimiter">)</span>
     <span class="delimiter">}</span>.<span title="(default: =&gt; Array[Byte])Array[Byte]">getOrElse</span><span class="delimiter">{</span>
-      <a href="#22688" title="=&gt; Array[Byte]">originalData</a>
+      <a href="#22667" title="=&gt; Array[Byte]">originalData</a>
     <span class="delimiter">}</span>
 
   <span class="comment">/** 拡張子 */</span>
-  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="String" id="9566">fileExtension</a>: <span title="String">String</span> = <a href="#22687" title="=&gt; String">name</a>.<span title="(x$1: java.lang.String)Array[java.lang.String]">split</span><span title="(xs: Array[java.lang.String])scala.collection.mutable.ArrayOps[java.lang.String]" class="delimiter">(</span><span title="java.lang.String(&quot;\\.&quot;)" class="string">&quot;\\.&quot;</span><span class="delimiter">)</span>.<span title="=&gt; Option[java.lang.String]">lastOption</span>.<span title="(default: =&gt; java.lang.String)java.lang.String">getOrElse</span><span class="delimiter">(</span><span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span><span class="delimiter">)</span>
+  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="String" id="9556">fileExtension</a>: <span title="String">String</span> = <a href="#22666" title="=&gt; String">name</a>.<span title="(x$1: java.lang.String)Array[java.lang.String]">split</span><span title="(xs: Array[java.lang.String])scala.collection.mutable.ArrayOps[java.lang.String]" class="delimiter">(</span><span title="java.lang.String(&quot;\\.&quot;)" class="string">&quot;\\.&quot;</span><span class="delimiter">)</span>.<span title="=&gt; Option[java.lang.String]">lastOption</span>.<span title="(default: =&gt; java.lang.String)java.lang.String">getOrElse</span><span class="delimiter">(</span><span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span><span class="delimiter">)</span>
 
   <span class="comment">/** 対応しているファイルの種類か? */</span>
-  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Boolean" id="9568">isSupport</a>: <span title="Boolean">Boolean</span> =
-    <a href="FileType.scala.html#9509" title="object com.github.xuwei_k.FileType">FileType</a>.<a href="FileType.scala.html#20773" title="=&gt; scala.collection.immutable.Set[String]">allExtentions</a>.<span title="(elem: String)Boolean">contains</span><span class="delimiter">(</span><a href="#9565" title="=&gt; String">fileExtension</a><span class="delimiter">)</span>
+  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Boolean" id="9558">isSupport</a>: <span title="Boolean">Boolean</span> =
+    <a href="FileType.scala.html#9480" title="object com.github.xuwei_k.FileType">FileType</a>.<a href="FileType.scala.html#20752" title="=&gt; scala.collection.immutable.Set[String]">allExtentions</a>.<span title="(elem: String)Boolean">contains</span><span class="delimiter">(</span><a href="#9555" title="=&gt; String">fileExtension</a><span class="delimiter">)</span>
 
   <span class="comment">/** syntax highlightに対応してなければNone */</span>
-  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Option[com.github.xuwei_k.FileType]" id="9570">fileType</a>: <span title="Option[com.github.xuwei_k.FileType]">Option</span><span class="delimiter">[</span>FileType<span class="delimiter">]</span> =
+  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Option[com.github.xuwei_k.FileType]" id="9560">fileType</a>: <span title="Option[com.github.xuwei_k.FileType]">Option</span><span class="delimiter">[</span>FileType<span class="delimiter">]</span> =
     <span class="keyword">for</span> <span class="delimiter">{</span>
-      <a title="java.lang.String" id="21703">f</a> &lt;- <span title="(x: String)Some[String]">Some</span><span title="(f: String =&gt; com.github.xuwei_k.FileType)Option[com.github.xuwei_k.FileType]" class="delimiter">(</span><a href="#22692" title="ByteFile.this.type" class="keyword">this</a>.<a href="#9565" title="=&gt; String">fileExtension</a><span class="delimiter">)</span>
-      <span class="keyword">if</span> <a href="#9567" title="=&gt; Boolean">isSupport</a>
-    <span class="delimiter">}</span> <span class="keyword">yield</span> <a href="FileType.scala.html#9509" title="object com.github.xuwei_k.FileType">FileType</a>.<a href="FileType.scala.html#20777" title="(extensiton: String)com.github.xuwei_k.FileType">getFileType</a><span class="delimiter">(</span><a href="#21703" title="String">f</a><span class="delimiter">)</span>
+      <a title="java.lang.String" id="21682">f</a> &lt;- <span title="(x: String)Some[String]">Some</span><span title="(f: String =&gt; com.github.xuwei_k.FileType)Option[com.github.xuwei_k.FileType]" class="delimiter">(</span><a href="#22671" title="ByteFile.this.type" class="keyword">this</a>.<a href="#9555" title="=&gt; String">fileExtension</a><span class="delimiter">)</span>
+      <span class="keyword">if</span> <a href="#9557" title="=&gt; Boolean">isSupport</a>
+    <span class="delimiter">}</span> <span class="keyword">yield</span> <a href="FileType.scala.html#9480" title="object com.github.xuwei_k.FileType">FileType</a>.<a href="FileType.scala.html#20756" title="(extensiton: String)com.github.xuwei_k.FileType">getFileType</a><span class="delimiter">(</span><a href="#21682" title="String">f</a><span class="delimiter">)</span>
 
   <span class="comment">/** そのファイルが含まれているdirectory名 */</span>
-  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="com.github.xuwei_k.ZipUtil.Dir" id="9572">parentDir</a>: ZipUtil.<span title="com.github.xuwei_k.ZipUtil.Dir">Dir</span> = <a href="#22687" title="implicit scala.Predef.augmentString : (x: String)scala.collection.immutable.StringOps">name</a>.<span title="implicit scala.Predef.augmentString : (x: String)scala.collection.immutable.StringOps">reverse</span>.<span title="(p: Char =&gt; Boolean)String">dropWhile</span><span title="implicit scala.Predef.augmentString : (x: String)scala.collection.immutable.StringOps" class="delimiter">(</span><a href="#22485" title="Char">_</a> <span title="(x: Char)Boolean">!=</span> <span title="Char(\'/\')" class="char">'/'</span><span class="delimiter">)</span>.<span title="=&gt; String">reverse</span>
+  <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="com.github.xuwei_k.ZipUtil.Dir" id="9562">parentDir</a>: ZipUtil.<span title="com.github.xuwei_k.ZipUtil.Dir">Dir</span> = <a href="#22666" title="implicit scala.Predef.augmentString : (x: String)scala.collection.immutable.StringOps">name</a>.<span title="implicit scala.Predef.augmentString : (x: String)scala.collection.immutable.StringOps">reverse</span>.<span title="(p: Char =&gt; Boolean)String">dropWhile</span><span title="implicit scala.Predef.augmentString : (x: String)scala.collection.immutable.StringOps" class="delimiter">(</span><a href="#22464" title="Char">_</a> <span title="(x: Char)Boolean">!=</span> <span title="Char(\'/\')" class="char">'/'</span><span class="delimiter">)</span>.<span title="=&gt; String">reverse</span>
 
 <span class="delimiter">}</span>
 
