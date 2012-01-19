@@ -1,5 +1,6 @@
 package com.github.xuwei_k
 
+import scala.collection.JavaConversions._
 import javax.servlet.http._
 import org.scalatra.{ ScalatraFilter }
 import org.apache.commons.fileupload.{FileItemStream,FileItemIterator}
@@ -11,28 +12,34 @@ import com.google.appengine.api.mail.{ MailService }
 /**
  * request の urlによって処理振り分ける
  */
-class Front extends ScalatraFilter {
+final class Front extends ScalatraFilter {
 
   implicit def toScalaIterator[A](ite:{def next():A;def hasNext():Boolean}) =
     new Iterator[A]{
-      def next = ite.next
-      def hasNext = ite.hasNext
+      override def next = ite.next
+      override def hasNext = ite.hasNext
     }
-
 
   get("/*") {
     "hello"
   }
 
+  val FileNameR = ".*filename=(.+)".r
+
   post("/source.zip") { //urlからフェッチする場合
 
     params.get("url") match {
       case Some(url) => {
-        val convertedData = Source2html.sourceFiles2html(FileService.getConnection(url).getInputStream)
+        val con = FileService.getConnection(url)
+        System.err.println(con.getHeaderFields)
+        val fileName = {for{
+          d <- Option(con.getHeaderFields.get("content-disposition"))
+          f <- d.collectFirst{case FileNameR(n) => n}
+        }yield f}.getOrElse("source")
 
-        val fileName = "source" //todo 取得して設定
+        val convertedData = Source2html.sourceFiles2html(con.getInputStream)
 
-        params.get("mail").map { address =>
+        params.get("mail").foreach{ address =>
           MyMailService.send(address, new MailService.Attachment(fileName + ".txt", convertedData))
         }
 
@@ -41,7 +48,7 @@ class Front extends ScalatraFilter {
         }
       }
 
-      case None => response.sendRedirect("/index.html")
+      case None => redirect("/index.html")
     }
   }
 
@@ -77,14 +84,16 @@ class Front extends ScalatraFilter {
    */
   def transferData(name: String, data: Array[Byte]) {
 
-    if (params.isDefinedAt("mail") && params.isDefinedAt("mail_address")) {
-      MyMailService.send(params("mail_address"), new MailService.Attachment(name + ".txt", data))
+    if (params.isDefinedAt("mail")) {
+      params.get("mail_address").foreach{ addr =>
+        MyMailService.send(addr,new MailService.Attachment(name + ".txt", data))
+      }
     }
 
     if (params.isDefinedAt("download")) {
       DownloadService.download(response, name, data)
     }else{
-      redirect("/")	
+      redirect("/index.html")
     }
   }
 
