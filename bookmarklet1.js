@@ -12,7 +12,8 @@
  */
 
 javascript:(
-  function(url){
+(function(url){
+  (function(branch){
     var form = document.createElement("form");
     var add  = function(name,value){
       var e = document.createElement("input");
@@ -25,11 +26,12 @@ javascript:(
     add("mail_address", "your mail address" );
     add("mail", "on" );
     add("download", "on" );
-    add("url", url + "/zipball/master" );
+    add("url", url + "/zipball/" + branch );
     form.setAttribute("action" ,"http://syntax-highlight.appspot.com/source.zip" );
     form.setAttribute("method" ,"post" );
     document.body.appendChild( form );
     form.submit();
-  }
-)("http://github.com/" + prompt("please input project name"))
+  })(prompt("please input branch name","master"))
+})("http://github.com/" + prompt("please input project name"))
+)
 
