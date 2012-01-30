@@ -35,7 +35,7 @@ final class Front extends ScalatraFilter {
         val fileName = {for{
           d <- Option(con.getHeaderFields.get("content-disposition"))
           f <- d.collectFirst{case FileNameR(n) => n}
-        }yield f}.getOrElse("source")
+        }yield f}.getOrElse("source.zip")
 
         val convertedData = Source2html.sourceFiles2html(con.getInputStream)
 
@@ -97,6 +97,7 @@ final class Front extends ScalatraFilter {
     }
   }
 
+  // TODO use https://github.com/scalatra/scalatra/blob/2.0.3/fileupload/src/main/scala/org/scalatra/fileupload/FileUploadSupport.scala
   post("/file_upload") { //Userが自分のfileをuploadした場合
 
     val files = getUploadFiles //uploadされたファイル取得
