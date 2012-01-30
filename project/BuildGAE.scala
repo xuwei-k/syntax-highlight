@@ -21,7 +21,7 @@ object BuildGAE extends Build{
           ,"com.google.appengine" % "appengine-java-sdk" % gaeSDK
           ,"com.google.appengine" % "appengine-api-1.0-sdk" % gaeSDK
           ,"net.kindleit" % "gae-runtime" % gaeSDK
-          ,"org.scalatra" %% "scalatra" % "2.0.2"
+          ,"org.scalatra" %% "scalatra" % "2.0.3"
         )
         ,resolvers ++= Seq(
             "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
