@@ -9,10 +9,8 @@ import scala.collection.JavaConversions._
 import java.io.{ ByteArrayOutputStream, ByteArrayInputStream, File, InputStream }
 import com.google.appengine.api.mail.{ MailService }
 
-/**
- * request の urlによって処理振り分ける
- */
-final class Front extends ScalatraFilter {
+object Front{
+  type InputFile = (String,InputStream) //todo classにする？
 
   implicit def toScalaIterator[A](ite:{def next():A;def hasNext():Boolean}) =
     new Iterator[A]{
@@ -20,14 +18,30 @@ final class Front extends ScalatraFilter {
       override def hasNext = ite.hasNext
     }
 
+  def getUploadFile(in:FileItemStream):InputFile = {
+    val stream = in.openStream
+    val out = new ByteArrayOutputStream
+    val fileName = in.getName
+
+    var len = 0
+    val buf = new Array[Byte](1024 * 1024)
+    while ({ len = stream.read(buf, 0, buf.length); len } != -1) {
+      out.write(buf, 0, len)
+    }
+    (fileName, new ByteArrayInputStream(out.toByteArray))
+  }
+
+  private val FileNameR = ".*filename=(.+)".r
+}
+
+final class Front extends ScalatraFilter {
+  import Front._
+
   get("/*") {
     "hello"
   }
 
-  val FileNameR = ".*filename=(.+)".r
-
   post("/source.zip") { //urlからフェッチする場合
-
     params.get("url") match {
       case Some(url) => {
         val con = FileService.getConnection(url)
@@ -62,21 +76,6 @@ final class Front extends ScalatraFilter {
     list.collect{case f if !f.isFormField => getUploadFile(f) }.toList
   }
 
-  type InputFile = (String,InputStream) //todo classにする？
-
-  def getUploadFile(in:FileItemStream):InputFile = {
-    val stream = in.openStream
-    val out = new ByteArrayOutputStream
-    val fileName = in.getName
-
-    var len = 0
-    val buf = new Array[Byte](1024 * 1024)
-    while ({ len = stream.read(buf, 0, buf.length); len } != -1) {
-      out.write(buf, 0, len)
-    }
-    (fileName, new ByteArrayInputStream(out.toByteArray))
-  }
-
   /**
    * 変換後のファイルを、mailまたは、responseとして転送
    * @param name
@@ -99,15 +98,12 @@ final class Front extends ScalatraFilter {
 
   // TODO use https://github.com/scalatra/scalatra/blob/2.0.3/fileupload/src/main/scala/org/scalatra/fileupload/FileUploadSupport.scala
   post("/file_upload") { //Userが自分のfileをuploadした場合
-
-    val files = getUploadFiles //uploadされたファイル取得
-
-    if(! files.isEmpty && files.head._1.length > 0){
-
-      val f = files.head //todo 複数ファイル対応
-      val convertedData = Source2html.sourceFiles2html( f._2 ) //変換
-
-      transferData( f._1 ,convertedData)
+    for{
+      (name,data) <- getUploadFiles.headOption//todo 複数ファイル対応
+      if name.length > 0 //このチェックおかしい?
+    }{
+      val convertedData = Source2html.sourceFiles2html(data)
+      transferData(name,convertedData)
     }
   }
 
