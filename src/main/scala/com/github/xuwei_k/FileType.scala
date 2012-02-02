@@ -49,7 +49,7 @@ object FileType{
   val prolog = FileType("prolog")
   val properties = FileType("properties")
   val python = FileType("python","py")
-  val ruby = FileType("ruby","rb")
+  val ruby = FileType("ruby","rb","erb")
   val scala = FileType("scala","scala","sbt")
   val sh = FileType("sh","sh")
   val slang = FileType("slang")
