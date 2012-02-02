@@ -21,10 +21,10 @@ object FileType{
   //todo 単にMap保持すれば、valで保持して、名前つける必要なくね？
 
   val bison = FileType("bison","bison")
-  val c = FileType("c","c")
+  val c = FileType("c","c","m")//objective c ほすぃ・・・
   val caml = FileType("caml","caml","ml","")
   val changelog = FileType("changelog")
-  val cpp = FileType("cpp","cpp","hpp","h")
+  val cpp = FileType("cpp","cpp","hpp","h","mm")
   val csharp = FileType("csharp","cs")
 //  val css = FileType("css","css")
   val desktop = FileType("desktop","desktop")
