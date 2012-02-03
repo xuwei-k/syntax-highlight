@@ -1,4 +1,4 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
 
 import java.io._
 import java.util.Properties;
@@ -35,7 +35,7 @@ object MyMailService {
       // 含まれるパートを再帰的に処理
       list ++ {
         (0 until content.getCount).map{
-          n => partAnalysis(content.getBodyPart(n),Nil) 
+          n => partAnalysis(content.getBodyPart(n),Nil)
         }.flatten
       }
     } else if (part.isMimeType("text/plain")) {

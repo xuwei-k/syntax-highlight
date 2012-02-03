@@ -1,4 +1,5 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
+
 import scala.collection.mutable
 
 /** fileの種類表す

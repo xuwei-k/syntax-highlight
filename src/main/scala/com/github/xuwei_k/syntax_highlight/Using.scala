@@ -1,4 +1,4 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
 
 // scalatra にあるものか、scala arm 使うべきか
 // https://github.com/scalatra/scalatra/blob/2.0.3/core/src/main/scala/org/scalatra/util/package.scala

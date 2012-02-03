@@ -1,4 +1,4 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
 
 object HtmlData {
 
@@ -29,13 +29,11 @@ object HtmlData {
     header(t) ++ escapeHtml(data) ++ footer
   }
 
-  val REPLACE = io.Codec("UTF-8").onMalformedInput(java.nio.charset.CodingErrorAction.REPLACE)
-
   // TODO side effect だらけで汚いｪ・・・(´・ω・｀)
   def escapeHtml(data:Array[Byte]):Array[Byte] = {
     import scala.xml.Utility.escape
 
-    val buf = escape( io.Source.fromBytes(data)(REPLACE).mkString ,new StringBuilder )
+    val buf = escape(bytes2String(data),new StringBuilder )
 
     val ite = io.Source.fromString( buf.toString ).getLines.zipWithIndex
 //ここから

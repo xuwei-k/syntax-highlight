@@ -1,4 +1,5 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
+
 import java.util.zip._
 import java.io._
 import scala.collection.{ mutable => mu }
@@ -17,7 +18,7 @@ object ZipUtil {
 
     using(new ZipInputStream(in)) { zipIn =>
 
-      var i: ZipEntry = null
+      var i: ZipEntry = null // TODO var !!! use loanPattern ?
       val buf = new Array[Byte](4096)
       val builder = new mu.ArrayBuilder.ofByte
       while ({ i = zipIn.getNextEntry; i != null }) {
@@ -39,19 +40,15 @@ object ZipUtil {
   //ディレクトリはとりあえずStringで保持してるけど、わかりやすいようにalias
   type Dir = String
 
-  /**
-   * byteのdataをzipのstreamに書きだす
+  /** byteのdataをzipのstreamに書きだす
    * @param zos Zipの出力のためのStream
    * @param files 圧縮するファイルの元データのファイル一覧
    */
   def encode(zos: ZipOutputStream,files: Traversable[ByteFile]) {
-
-    val buf = new Array[Byte](4096)
     for {
       f <- files
-      val name = { f.name + { if (f.isSupport) ".html" else "" } }.replace('\\', '/')
     } {
-//      println(name)
+      val name = f.convertedName.replace('\\', '/')
       zos.putNextEntry(new ZipEntry(name))
       zos.write(f.data)
     }
@@ -59,7 +56,7 @@ object ZipUtil {
   }
 
   /** syntax highlight用のjsのfileを加えるのに必要な情報を取得
-   * fileの一覧から 
+   * fileの一覧から
    * Map(ディレクトリ -> そこに存在するFileTypeのSet)
    * を作成
    */

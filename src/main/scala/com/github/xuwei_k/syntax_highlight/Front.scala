@@ -1,4 +1,4 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
 
 import scala.collection.JavaConversions._
 import javax.servlet.http._

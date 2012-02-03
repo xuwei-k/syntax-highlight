@@ -1,4 +1,4 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
 
 import java.util.zip._
 import java.io._
@@ -8,12 +8,14 @@ import Using._
 /** source fileをhtmlに変換する処理
  */
 object Source2html {
-
-  /** jsとかcss */
-  def addFiles(fType:FileType*):Seq[ByteFile] =
-    fType.map{_.jsFile} ++ Seq("sh_main.js","sh_style.css").map{ f =>
+  private[this] val commonJS =
+    Seq("sh_main.js","sh_style.css").map{ f =>
       ByteFile(f , fileToByteArray("./resource/" + f))
     }
+
+  /** jsとかcss */
+  private def addFiles(fType:FileType*):Seq[ByteFile] =
+    fType.map{_.jsFile} ++ commonJS
 
   /** ファイルをbyte配列にして返す
    */
@@ -34,14 +36,12 @@ object Source2html {
   def sourceFiles2html(in:InputStream,out:OutputStream){
     val files = ZipUtil.extractFileList( in )
 
-    val map = ZipUtil.getFileMap( files )
-
-    for{
-      (dir,fileTypes) <- map
+    val newFiles = for{
+      (dir,fileTypes) <- ZipUtil.getFileMap( files )
       f <- addFiles(fileTypes.toSeq:_*)
-    }(files += f.copy(name = {dir + f.name}))
+    } yield f.copy(name = {dir + f.name})
 
-    ZipUtil.encode(new ZipOutputStream( out ), files )
+    ZipUtil.encode(new ZipOutputStream( out ), files ++ newFiles )
   }
 
   def sourceFiles2html(in:InputStream):Array[Byte] = {

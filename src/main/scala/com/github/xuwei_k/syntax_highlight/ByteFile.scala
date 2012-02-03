@@ -1,4 +1,4 @@
-package com.github.xuwei_k
+package com.github.xuwei_k.syntax_highlight
 
 import java.io._
 
@@ -9,12 +9,15 @@ import java.io._
 case class ByteFile(val name: String, originalData: Array[Byte]) {
   import ByteFile._
 
+  val convertedName = if(isSupport || isMarkdown) name + ".html" else name
+
   /** (変換できるならば)変換後のbinaryのデータ */
-  lazy val data =
+  lazy val data:Array[Byte] =
     fileType.map{ fType =>
       HtmlData.convertHtml(originalData, fType)
     }.getOrElse{
-      originalData
+      if(isMarkdown) Markdown(bytes2String(originalData))
+      else originalData
     }
 
   /** 拡張子 */
@@ -33,6 +36,8 @@ case class ByteFile(val name: String, originalData: Array[Byte]) {
 
   /** そのファイルが含まれているdirectory名 */
   lazy val parentDir: ZipUtil.Dir = name.reverse.dropWhile(_ != '/').reverse
+
+  lazy val isMarkdown: Boolean = Set("md","markdown").exists(fileExtension.equalsIgnoreCase)
 
 }
 
