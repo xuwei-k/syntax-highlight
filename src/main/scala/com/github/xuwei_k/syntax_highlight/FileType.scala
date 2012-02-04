@@ -6,7 +6,7 @@ import scala.collection.mutable
  * @param name
  * @param extensions 拡張子の一覧
  */
-final case class FileType private(val name:String,extensions:String*){
+final case class FileType private(name:String,extensions:String*){
   import FileType._
 
   instances += this //mapに保持

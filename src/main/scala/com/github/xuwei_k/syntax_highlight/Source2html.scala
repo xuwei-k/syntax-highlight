@@ -33,7 +33,7 @@ object Source2html {
    * @param in zipになってるsource file
    * @param out 作成したzipの出力先
    */
-  def sourceFiles2html(in:InputStream,out:OutputStream){
+  private def sourceFiles2html(in:InputStream,out:OutputStream){
     val files = ZipUtil.extractFileList( in )
 
     val newFiles = for{

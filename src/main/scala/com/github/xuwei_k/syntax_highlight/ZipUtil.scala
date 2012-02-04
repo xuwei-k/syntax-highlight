@@ -9,32 +9,26 @@ import Using._
  */
 object ZipUtil {
 
-  /**
-   * zipのファイルを解凍して、それぞれをByteFileというentityにする
+  /** zipのファイルを解凍して、それぞれをByteFileというentityにする
    */
-  def extractFileList(in: InputStream): mu.ArrayBuffer[ByteFile] = {
-
-    val fileList = mu.ArrayBuffer[ByteFile]()
-
+  def extractFileList(in: InputStream): Seq[ByteFile] = {
     using(new ZipInputStream(in)) { zipIn =>
-
-      var i: ZipEntry = null // TODO var !!! use loanPattern ?
       val buf = new Array[Byte](4096)
       val builder = new mu.ArrayBuilder.ofByte
-      while ({ i = zipIn.getNextEntry; i != null }) {
-        if (!i.isDirectory) {
-          var length = 0
-          while ({ length = zipIn.read(buf); length != -1 }) {
-            builder ++= (buf.take(length))
-          }
-          val file = new ByteFile(i.getName, builder.result)
-          fileList += file
+      Iterator.continually(zipIn.getNextEntry).takeWhile{
+        null ne
+      }.filterNot{
+        _.isDirectory
+      }.map{ e =>
+        var length = 0
+        while ({ length = zipIn.read(buf); length != -1 }) {
+          builder ++= (buf.take(length))
         }
+        val file = new ByteFile(e.getName, builder.result)
         builder.clear()
-      }
+        file
+      }.toBuffer
     }
-
-    fileList
   }
 
   //ディレクトリはとりあえずStringで保持してるけど、わかりやすいようにalias

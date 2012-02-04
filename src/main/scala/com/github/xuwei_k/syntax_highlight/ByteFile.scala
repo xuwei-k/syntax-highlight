@@ -6,8 +6,7 @@ import java.io._
  * @param name fileの名前
  * @param data fileの中身
  */
-case class ByteFile(val name: String, originalData: Array[Byte]) {
-  import ByteFile._
+case class ByteFile(name: String, originalData: Array[Byte]) {
 
   val convertedName = if(isSupport || isMarkdown) name + ".html" else name
 
