@@ -7,6 +7,7 @@ import java.io._
  * @param data fileの中身
  */
 case class ByteFile(name: String, originalData: Array[Byte]) {
+  import ByteFile._
 
   val convertedName = if(isSupport || isMarkdown) name + ".html" else name
 
@@ -20,23 +21,27 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
     }
 
   /** 拡張子 */
-  lazy val fileExtension: String = name.split("\\.").lastOption.getOrElse("")
+  private lazy val fileExtension: Option[String] = name.split('.').lastOption
 
   /** 対応しているファイルの種類か? */
   lazy val isSupport: Boolean =
-    FileType.allExtentions.contains(fileExtension)
+    fileExtension.map{FileType.allExtentions.contains}.getOrElse(false)
 
   /** syntax highlightに対応してなければNone */
   lazy val fileType: Option[FileType] =
     for {
-      f <- Some(this.fileExtension)
+      f <- fileExtension
       if isSupport
     } yield FileType.getFileType(f)
 
   /** そのファイルが含まれているdirectory名 */
   lazy val parentDir: ZipUtil.Dir = name.reverse.dropWhile(_ != '/').reverse
 
-  lazy val isMarkdown: Boolean = Set("md","markdown").exists(fileExtension.equalsIgnoreCase)
+  lazy val isMarkdown: Boolean =
+    fileExtension.map{e => MDextensions.exists(e.equalsIgnoreCase)}.getOrElse(false)
 
 }
 
+object ByteFile{
+  private val MDextensions = Set("md","markdown")
+}
