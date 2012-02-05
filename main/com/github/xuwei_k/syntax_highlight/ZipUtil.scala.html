@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <meta http-equiv="Expires" content="0" />
+        <title>com/github/xuwei_k/syntax_highlight/ZipUtil.scala</title>
+        <script type="text/javascript" src="../../../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> com.github.xuwei_k.syntax_highlight
+
+<span class="keyword">import</span> java.util.zip._
+<span class="keyword">import</span> java.io._
+<span class="keyword">import</span> scala.collection.<span class="delimiter">{</span> mutable =&gt; mu <span class="delimiter">}</span>
+<span class="keyword">import</span> <a href="Using.scala.html#9544" title="object com.github.xuwei_k.syntax_highlight.Using">Using</a>._
+
+<span class="comment">/** zipの処理に関するutility
+ */</span>
+<span class="keyword">object</span> <a title="object com.github.xuwei_k.syntax_highlight.ZipUtil" id="9553">ZipUtil</a> <span title="ScalaObject" class="delimiter">{</span>
+
+  <span class="comment">/** zipのファイルを解凍して、それぞれをByteFileというentityにする
+   */</span>
+  <span class="keyword">def</span> <a title="(in: java.io.InputStream)Seq[com.github.xuwei_k.syntax_highlight.ByteFile]" id="27742">extractFileList</a><span class="delimiter">(</span><a title="java.io.InputStream" id="66535">in</a>: <span title="java.io.InputStream">InputStream</span><span class="delimiter">)</span>: <span title="Seq[com.github.xuwei_k.syntax_highlight.ByteFile]">Seq</span><span class="delimiter">[</span>ByteFile<span class="delimiter">]</span> = <span class="delimiter">{</span>
+    <a href="Using.scala.html#27747" title="(resource: java.util.zip.ZipInputStream)(func: java.util.zip.ZipInputStream =&gt; scala.collection.mutable.Buffer[com.github.xuwei_k.syntax_highlight.ByteFile])(implicit closer: com.github.xuwei_k.syntax_highlight.Using.Closer[java.util.zip.ZipInputStream])scala.collection.mutable.Buffer[com.github.xuwei_k.syntax_highlight.ByteFile]">using</a><span class="delimiter">(</span><span title="java.util.zip.ZipInputStream" class="keyword">new</span> <span title="java.util.zip.ZipInputStream">ZipInputStream</span><span class="delimiter">(</span><a href="#66535" title="java.io.InputStream">in</a><span class="delimiter">)</span><span class="delimiter">)</span> <a href="Using.scala.html#27758" title="=&gt; java.lang.Object with com.github.xuwei_k.syntax_highlight.Using.Closer[AnyRef{def close(): Unit}]" class="delimiter">{</a> <a title="java.util.zip.ZipInputStream" id="67755">zipIn</a> =&gt;
+      <span class="keyword">val</span> <a title="Array[Byte]" id="67756">buf</a> = <span title="Array[Byte]" class="keyword">new</span> <span title="Array[Byte]">Array</span><span class="delimiter">[</span>Byte<span class="delimiter">]</span><span class="delimiter">(</span><span title="Int(4096)" class="int">4096</span><span class="delimiter">)</span>
+      <span class="keyword">val</span> <a title="scala.collection.mutable.ArrayBuilder.ofByte" id="67757">builder</a> = <span title="scala.collection.mutable.ArrayBuilder.ofByte" class="keyword">new</span> mu.<span title="object scala.collection.mutable.ArrayBuilder">ArrayBuilder</span>.<span title="scala.collection.mutable.ArrayBuilder.ofByte">ofByte</span>
+      <span title="=&gt; collection.Iterator.type">Iterator</span>.<span title="(elem: =&gt; java.util.zip.ZipEntry)Iterator[java.util.zip.ZipEntry]">continually</span><span class="delimiter">(</span><a href="#67755" title="java.util.zip.ZipInputStream">zipIn</a>.<span title="()java.util.zip.ZipEntry">getNextEntry</span><span class="delimiter">)</span>.<span title="(p: java.util.zip.ZipEntry =&gt; Boolean)Iterator[java.util.zip.ZipEntry]">takeWhile</span><span class="delimiter">{</span>
+        <span title="Null(null)" class="keyword">null</span> <a href="#68131" title="(x$1: AnyRef)Boolean">ne</a>
+      <span class="delimiter">}</span>.<span title="(p: java.util.zip.ZipEntry =&gt; Boolean)Iterator[java.util.zip.ZipEntry]">filterNot</span><span class="delimiter">{</span>
+        <a href="#68134" title="java.util.zip.ZipEntry">_</a>.<span title="()Boolean">isDirectory</span>
+      <span class="delimiter">}</span>.<span title="(f: java.util.zip.ZipEntry =&gt; com.github.xuwei_k.syntax_highlight.ByteFile)Iterator[com.github.xuwei_k.syntax_highlight.ByteFile]">map</span><span class="delimiter">{</span> <a title="java.util.zip.ZipEntry" id="68139">e</a> =&gt;
+        <span class="keyword">var</span> <a title="Int" id="68140">length</a> = <span title="Int(0)" class="int">0</span>
+        <span title="Unit" class="keyword">while</span> <span class="delimiter">(</span><span class="delimiter">{</span> <a href="#68140" title="Int">length</a> = <a href="#67755" title="java.util.zip.ZipInputStream">zipIn</a>.<span title="(x$1: Array[Byte])Int">read</span><span class="delimiter">(</span><a href="#67756" title="Array[Byte]">buf</a><span class="delimiter">)</span>; <a href="#68140" title="Int">length</a> <span title="(x: Int)Boolean">!=</span> -<span title="Int(-1)" class="int">1</span> <span class="delimiter">}</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+          <a href="#67757" title="scala.collection.mutable.ArrayBuilder.ofByte">builder</a> <a href="#68142" title="(xs: scala.collection.TraversableOnce[Byte])builder.type">++=</a> <span class="delimiter">(</span><a href="#67756" title="implicit scala.Predef.byteArrayOps : (xs: Array[Byte])scala.collection.mutable.ArrayOps[Byte]">buf</a>.<span title="(n: Int)Array[Byte]">take</span><span title="implicit scala.Predef.byteArrayOps : (xs: Array[Byte])scala.collection.mutable.ArrayOps[Byte]" class="delimiter">(</span><a href="#68140" title="Int">length</a><span class="delimiter">)</span><span class="delimiter">)</span>
+        <span class="delimiter">}</span>
+        <span class="keyword">val</span> <a title="com.github.xuwei_k.syntax_highlight.ByteFile" id="68141">file</a> = <span title="com.github.xuwei_k.syntax_highlight.ByteFile" class="keyword">new</span> <a href="ByteFile.scala.html#9471" title="com.github.xuwei_k.syntax_highlight.ByteFile">ByteFile</a><span class="delimiter">(</span><a href="#68139" title="java.util.zip.ZipEntry">e</a>.<span title="()java.lang.String">getName</span>, <a href="#67757" title="scala.collection.mutable.ArrayBuilder.ofByte">builder</a>.<span title="()Array[Byte]">result</span><span class="delimiter">)</span>
+        <a href="#67757" title="scala.collection.mutable.ArrayBuilder.ofByte">builder</a>.<span title="()Unit">clear</span><span class="delimiter">(</span><span class="delimiter">)</span>
+        <a href="#68141" title="com.github.xuwei_k.syntax_highlight.ByteFile">file</a>
+      <span class="delimiter">}</span>.<span title="scala.collection.mutable.Buffer[com.github.xuwei_k.syntax_highlight.ByteFile]">toBuffer</span>
+    <span class="delimiter">}</span>
+  <span class="delimiter">}</span>
+
+  <span class="comment">//ディレクトリはとりあえずStringで保持してるけど、わかりやすいようにalias</span>
+  <span class="keyword">type</span> <a title="String" id="27743">Dir</a> = <span title="String">String</span>
+
+  <span class="comment">/** byteのdataをzipのstreamに書きだす
+   * @param zos Zipの出力のためのStream
+   * @param files 圧縮するファイルの元データのファイル一覧
+   */</span>
+  <span class="keyword">def</span> <a title="(zos: java.util.zip.ZipOutputStream, files: Traversable[com.github.xuwei_k.syntax_highlight.ByteFile])Unit" id="27744">encode</a><span class="delimiter">(</span><a title="java.util.zip.ZipOutputStream" id="67528">zos</a>: <span title="java.util.zip.ZipOutputStream">ZipOutputStream</span>,<a title="Traversable[com.github.xuwei_k.syntax_highlight.ByteFile]" id="67529">files</a>: <span title="Traversable[com.github.xuwei_k.syntax_highlight.ByteFile]">Traversable</span><span class="delimiter">[</span>ByteFile<span class="delimiter">]</span><span class="delimiter">)</span> <span class="delimiter">{</span>
+    <span class="keyword">for</span> <span class="delimiter">{</span>
+      <a title="com.github.xuwei_k.syntax_highlight.ByteFile" id="68361">f</a> &lt;- <a href="#67529" title="(f: com.github.xuwei_k.syntax_highlight.ByteFile =&gt; Unit)Unit">files</a>
+    <span class="delimiter">}</span> <span class="delimiter">{</span>
+      <span class="keyword">val</span> <a title="java.lang.String" id="68362">name</a> = <a href="#68361" title="com.github.xuwei_k.syntax_highlight.ByteFile">f</a>.<a href="ByteFile.scala.html#25233" title="=&gt; java.lang.String">convertedName</a>.<span title="(x$1: Char, x$2: Char)java.lang.String">replace</span><span class="delimiter">(</span><span title="Char(\'\\\\\')" class="char">'\\'</span>, <span title="Char(\'/\')" class="char">'/'</span><span class="delimiter">)</span>
+      <a href="#67528" title="java.util.zip.ZipOutputStream">zos</a>.<span title="(x$1: java.util.zip.ZipEntry)Unit">putNextEntry</span><span class="delimiter">(</span><span title="java.util.zip.ZipEntry" class="keyword">new</span> <span title="java.util.zip.ZipEntry">ZipEntry</span><span class="delimiter">(</span><a href="#68362" title="java.lang.String">name</a><span class="delimiter">)</span><span class="delimiter">)</span>
+      <a href="#67528" title="java.util.zip.ZipOutputStream">zos</a>.<span title="(x$1: Array[Byte])Unit">write</span><span class="delimiter">(</span><a href="#68361" title="com.github.xuwei_k.syntax_highlight.ByteFile">f</a>.<a href="ByteFile.scala.html#25235" title="=&gt; Array[Byte]">data</a><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+    <a href="#67528" title="java.util.zip.ZipOutputStream">zos</a>.<span title="()Unit">close</span>
+  <span class="delimiter">}</span>
+
+  <span class="comment">/** syntax highlight用のjsのfileを加えるのに必要な情報を取得
+   * fileの一覧から
+   * Map(ディレクトリ -&gt; そこに存在するFileTypeのSet)
+   * を作成
+   */</span>
+  <span class="keyword">def</span> <a title="(files: Traversable[com.github.xuwei_k.syntax_highlight.ByteFile])scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]]" id="27745">getFileMap</a><span class="delimiter">(</span><a title="Traversable[com.github.xuwei_k.syntax_highlight.ByteFile]" id="66537">files</a>: <span title="Traversable[com.github.xuwei_k.syntax_highlight.ByteFile]">Traversable</span><span class="delimiter">[</span>ByteFile<span class="delimiter">]</span><span class="delimiter">)</span>: mu.<span title="scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]]">HashMap</span><span class="delimiter">[</span>Dir, mu.Set<span class="delimiter">[</span>FileType<span class="delimiter">]</span><span class="delimiter">]</span> = <span class="delimiter">{</span>
+
+    <span class="comment">//なんでMultiMap作るだけなのに、こんなに長いの？</span>
+    <span class="keyword">val</span> <a title="map extends scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]] with scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType]" id="68376">map</a> = <a href="#68377" title="scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]] with scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType]" class="keyword">new</a> <a title="anonymous class $anon extends scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]] with scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType]" id="68377">mu</a>.<span title="scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]]">HashMap</span><span class="delimiter">[</span>Dir, mu.Set<span class="delimiter">[</span>FileType<span class="delimiter">]</span><span class="delimiter">]</span> <span class="keyword">with</span> mu.<span title="scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType]">MultiMap</span><span class="delimiter">[</span>Dir, FileType<span class="delimiter">]</span>
+    <span class="keyword">for</span> <span class="delimiter">{</span>
+      <a title="com.github.xuwei_k.syntax_highlight.ByteFile" id="68471">f</a> &lt;- <a href="#66537" title="(f: com.github.xuwei_k.syntax_highlight.ByteFile =&gt; scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]] with scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType])Unit">files</a>
+      <span class="keyword">if</span> <a href="#68471" title="com.github.xuwei_k.syntax_highlight.ByteFile">f</a>.<a href="ByteFile.scala.html#25239" title="=&gt; Boolean">isSupport</a>
+    <span class="delimiter">}</span> <span class="delimiter">{</span>
+      <a href="#68376" title="map extends scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]] with scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType]">map</a>.<span title="(key: com.github.xuwei_k.syntax_highlight.ZipUtil.Dir, value: com.github.xuwei_k.syntax_highlight.FileType)map.type">addBinding</span><span class="delimiter">(</span><a href="#68471" title="com.github.xuwei_k.syntax_highlight.ByteFile">f</a>.<a href="ByteFile.scala.html#25243" title="=&gt; com.github.xuwei_k.syntax_highlight.ZipUtil.Dir">parentDir</a>, <a href="#68471" title="com.github.xuwei_k.syntax_highlight.ByteFile">f</a>.<a href="ByteFile.scala.html#25241" title="=&gt; Option[com.github.xuwei_k.syntax_highlight.FileType]">fileType</a>.<span title="=&gt; com.github.xuwei_k.syntax_highlight.FileType">get</span><span class="delimiter">)</span>
+    <span class="delimiter">}</span>
+    <a href="#68376" title="map extends scala.collection.mutable.HashMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,scala.collection.mutable.Set[com.github.xuwei_k.syntax_highlight.FileType]] with scala.collection.mutable.MultiMap[com.github.xuwei_k.syntax_highlight.ZipUtil.Dir,com.github.xuwei_k.syntax_highlight.FileType]">map</a>
+  <span class="delimiter">}</span>
+<span class="delimiter">}</span>
+
+        </pre>
+    </body>
+</html>
