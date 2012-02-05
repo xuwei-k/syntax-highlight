@@ -35,7 +35,7 @@ object FileType{
   val haxe = FileType("haxe","haxe")
 //  val html = FileType("html","html","xhtml") //todo えんこーど
   val java = FileType("java","java")
-//  val javascript = FileType("javascript","js")
+  val javascript = FileType("javascript","json")
   val javascript_dom = FileType("javascript_dom")
   val latex = FileType("latex")
   val ldap = FileType("ldap")
