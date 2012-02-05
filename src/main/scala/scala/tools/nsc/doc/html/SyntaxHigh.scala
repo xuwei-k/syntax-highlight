@@ -1,4 +1,5 @@
 // https://github.com/scala/scala/blob/v2.10.0-M1/src/compiler/scala/tools/nsc/doc/html/SyntaxHigh.scala
+// https://github.com/kmizu/scala/blob/bb2ae3f14c8984ae088258c5c66f082ced46faad/src/compiler/scala/tools/nsc/doc/html/SyntaxHigh.scala
 
 /* NSC -- new Scala compiler
  * Copyright 2010-2011 LAMP/EPFL
@@ -8,6 +9,7 @@
 package scala.tools.nsc.doc.html
 
 import xml.NodeSeq
+import scala.annotation.tailrec
 
 /** Highlight the syntax of Scala code appearing in a `{{{` wiki block
   * (see method `HtmlPage.blockToHtml`).
@@ -51,7 +53,7 @@ object SyntaxHigh {
     "Seq", "Set", "Short", "Some", "String", "Symbol",
     "Triple", "Unit")
 
-  def apply(str: String): NodeSeq = apply(str.getBytes)
+  def apply(data: String): NodeSeq = apply(data.getBytes)
 
   def apply(buf: Array[Byte]): NodeSeq = {
     val out = new StringBuilder
@@ -212,78 +214,82 @@ object SyntaxHigh {
       out.toString
     }
 
+    @tailrec
     def parse(pre: String, i: Int): Int = {
       out append pre
-      if (i == buf.length) return i
-      buf(i) match {
-        case '\n' =>
-          parse("\n", i+1)
-        case ' ' =>
-          parse(" ", i+1)
-        case '&' =>
-          parse("&amp;", i+1)
-        case '<' =>
-          val ch = buf(i+1).toChar
-          if (ch == '-' || ch == ':' || ch == '%')
-            parse("<span class=\"kw\">&lt;"+ch+"</span>", i+2)
-          else
-            parse("&lt;", i+1)
-        case '>' =>
-          if (buf(i+1) == ':')
-            parse("<span class=\"kw\">&gt;:</span>", i+2)
-          else
-            parse("&gt;", i+1)
-        case '=' =>
-          if (buf(i+1) == '>')
-            parse("<span class=\"kw\">=&gt;</span>", i+2)
-          else
-            parse(buf(i).toChar.toString, i+1)
-        case '/' =>
-          if (buf(i+1) == '/' || buf(i+1) == '*') {
-            val c = comment(i+1)
-            parse("<span class=\"cmt\">"+c+"</span>", i+c.length)
-          } else
-            parse(buf(i).toChar.toString, i+1)
-        case '\'' =>
-          val s = charlit(i+1)
-          if (s.length > 0)
+      if (i == buf.length) {
+        i
+      } else {
+        buf(i) match {
+          case '\n' =>
+            parse("\n", i+1)
+          case ' ' =>
+            parse(" ", i+1)
+          case '&' =>
+            parse("&amp;", i+1)
+          case '<' =>
+            val ch = buf(i+1).toChar
+            if (ch == '-' || ch == ':' || ch == '%')
+              parse("<span class=\"kw\">&lt;"+ch+"</span>", i+2)
+            else
+              parse("&lt;", i+1)
+          case '>' =>
+            if (buf(i+1) == ':')
+              parse("<span class=\"kw\">&gt;:</span>", i+2)
+            else
+              parse("&gt;", i+1)
+          case '=' =>
+            if (buf(i+1) == '>')
+              parse("<span class=\"kw\">=&gt;</span>", i+2)
+            else
+              parse(buf(i).toChar.toString, i+1)
+          case '/' =>
+            if (buf(i+1) == '/' || buf(i+1) == '*') {
+              val c = comment(i+1)
+              parse("<span class=\"cmt\">"+c+"</span>", i+c.length)
+            } else
+              parse(buf(i).toChar.toString, i+1)
+            case '\'' =>
+            val s = charlit(i+1)
+            if (s.length > 0)
+              parse("<span class=\"lit\">"+s+"</span>", i+s.length)
+            else
+              parse(buf(i).toChar.toString, i+1)
+          case '"' =>
+            val s = strlit(i+1)
             parse("<span class=\"lit\">"+s+"</span>", i+s.length)
-          else
-            parse(buf(i).toChar.toString, i+1)
-        case '"' =>
-          val s = strlit(i+1)
-          parse("<span class=\"lit\">"+s+"</span>", i+s.length)
-        case '@' =>
-          val k = lookup(annotations, i+1)
-          if (k >= 0)
-            parse("<span class=\"ano\">@"+annotations(k)+"</span>", i+annotations(k).length+1)
-          else
-            parse(buf(i).toChar.toString, i+1)
-        case _ =>
-          if (i == 0 || !Character.isJavaIdentifierPart(buf(i-1).toChar)) {
-            if (Character.isDigit(buf(i)) ||
+          case '@' =>
+            val k = lookup(annotations, i+1)
+            if (k >= 0)
+              parse("<span class=\"ano\">@"+annotations(k)+"</span>", i+annotations(k).length+1)
+            else
+              parse(buf(i).toChar.toString, i+1)
+          case _ =>
+            if (i == 0 || !Character.isJavaIdentifierPart(buf(i-1).toChar)) {
+              if (Character.isDigit(buf(i)) ||
                 (buf(i) == '.' && Character.isDigit(buf(i+1)))) {
-              val s = numlit(i)
-              parse("<span class=\"num\">"+s+"</span>", i+s.length)
-            } else {
-              val k = lookup(reserved, i)
-              if (k >= 0)
-                parse("<span class=\"kw\">"+reserved(k)+"</span>", i+reserved(k).length)
-              else {
-                val k = lookup(standards, i)
+                val s = numlit(i)
+                parse("<span class=\"num\">"+s+"</span>", i+s.length)
+              } else {
+                val k = lookup(reserved, i)
                 if (k >= 0)
-                  parse("<span class=\"std\">"+standards(k)+"</span>", i+standards(k).length)
-                else
-                  parse(buf(i).toChar.toString, i+1)
+                  parse("<span class=\"kw\">"+reserved(k)+"</span>", i+reserved(k).length)
+                else {
+                  val k = lookup(standards, i)
+                  if (k >= 0)
+                    parse("<span class=\"std\">"+standards(k)+"</span>", i+standards(k).length)
+                  else
+                    parse(buf(i).toChar.toString, i+1)
+                }
               }
-            }
-          } else
-            parse(buf(i).toChar.toString, i+1)
+            } else
+              parse(buf(i).toChar.toString, i+1)
+        }
       }
-      i
     }
 
     parse("", 0)
     xml.Unparsed(out.toString)
   }
 }
+
