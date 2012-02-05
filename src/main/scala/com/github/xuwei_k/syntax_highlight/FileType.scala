@@ -6,7 +6,7 @@ import scala.collection.mutable
  * @param name
  * @param extensions 拡張子の一覧
  */
-final case class FileType private(name:String,extensions:String*){
+sealed case class FileType private(name:String,extensions:String*){
   import FileType._
 
   instances += this //mapに保持
@@ -14,10 +14,11 @@ final case class FileType private(name:String,extensions:String*){
   private[this] lazy val jsFileName = "sh_%s.js" format name
 
   lazy val jsFile:ByteFile =
-    ByteFile(jsFileName,Source2html.fileToByteArray("resource/" + jsFileName))
+    ByteFile(jsFileName,Source2html.fileToByteArray(ResourceDir + jsFileName))
 }
 
 object FileType{
+  val ResourceDir = "resource/"
 
   //todo 単にMap保持すれば、valで保持して、名前つける必要なくね？
 
@@ -51,7 +52,12 @@ object FileType{
   val properties = FileType("properties")
   val python = FileType("python","py")
   val ruby = FileType("ruby","rb","erb")
-  val scala = FileType("scala","scala","sbt")
+//  val scala = FileType("scala","scala","sbt")
+  val scala = new FileType("scala","scala","sbt"){
+    val css = "template.css"
+    override lazy val jsFile = ByteFile(css,Source2html.fileToByteArray(ResourceDir+css))
+  }
+
   val sh = FileType("sh","sh")
   val slang = FileType("slang")
   val sml = FileType("sml")

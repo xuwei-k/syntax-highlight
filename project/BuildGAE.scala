@@ -23,6 +23,7 @@ object BuildGAE extends Build{
           ,"net.kindleit" % "gae-runtime" % gaeSDK
           ,"org.scalatra" %% "scalatra" % "2.0.3"
           ,"net.databinder" %% "pamflet-knockoff" % "0.3.2"
+          ,"org.scalaz" %% "scalaz-core" % "6.0.4"
         )
         ,resolvers ++= Seq(
             "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
