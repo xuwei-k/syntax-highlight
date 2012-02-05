@@ -30,6 +30,7 @@ object BuildGAE extends Build{
            ,"xuwei-k repo" at "http://xuwei-k.github.com/mvn"
          )
         ,addCompilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.8-SNAPSHOT")
+        ,scalacOptions <+= scalaSource in Compile map { "-P:sxr:base-directory:" + _.getAbsolutePath }
         ,sourceCount <<= ( sources in Compile , sources in Test ) map{ (main,test) =>
            println{
              "\nmain " + main.map{f => IO.readLines(f).size}.sum +
