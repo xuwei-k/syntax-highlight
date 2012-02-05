@@ -7,6 +7,6 @@ object DownloadService {
   def download(response: Response, fileName:String , data: Array[Byte]) {
     response.setContentType("application/zip")
     response.setHeader("Content-Disposition", "attachment; filename=" + fileName )
-    Using.using(response.getOutputStream){ _.write(data) }
+    resource.managed(response.getOutputStream).foreach{ _.write(data) }
   }
 }

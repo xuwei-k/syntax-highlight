@@ -24,6 +24,7 @@ object BuildGAE extends Build{
           ,"org.scalatra" %% "scalatra" % "2.0.3"
           ,"net.databinder" %% "pamflet-knockoff" % "0.3.2"
           ,"org.scalaz" %% "scalaz-core" % "6.0.4"
+          ,"com.github.jsuereth.scala-arm" %% "scala-arm" % "1.1"
         )
         ,resolvers ++= Seq(
             "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"

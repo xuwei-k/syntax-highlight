@@ -3,7 +3,6 @@ package com.github.xuwei_k.syntax_highlight
 import java.util.zip._
 import java.io._
 import scala.collection.{ mutable => mu }
-import Using._
 
 /** zipの処理に関するutility
  */
@@ -12,7 +11,7 @@ object ZipUtil {
   /** zipのファイルを解凍して、それぞれをByteFileというentityにする
    */
   def extractFileList(in: InputStream): Seq[ByteFile] = {
-    using(new ZipInputStream(in)) { zipIn =>
+    resource.managed(new ZipInputStream(in)).acquireAndGet{ zipIn =>
       val buf = new Array[Byte](4096)
       val builder = new mu.ArrayBuilder.ofByte
       Iterator.continually(zipIn.getNextEntry).takeWhile{

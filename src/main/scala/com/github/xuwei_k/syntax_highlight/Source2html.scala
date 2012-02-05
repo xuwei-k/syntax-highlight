@@ -3,7 +3,6 @@ package com.github.xuwei_k.syntax_highlight
 import java.util.zip._
 import java.io._
 import scala.collection.{mutable => mu }
-import Using._
 
 /** source fileをhtmlに変換する処理
  */
@@ -22,9 +21,8 @@ object Source2html {
   def fileToByteArray(fileName:String):Array[Byte] = {
     val file = new File(fileName)
     val buf = new Array[Byte](file.length toInt)
-    using(new FileInputStream(file)){
-      in =>
-      in.read(buf)
+    resource.managed(new FileInputStream(file)).foreach{
+      _.read(buf)
     }
     buf
   }
