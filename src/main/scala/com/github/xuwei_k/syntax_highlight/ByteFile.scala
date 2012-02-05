@@ -16,7 +16,7 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
   lazy val data:Array[Byte] =
     if(fileType === Some(FileType.scala)){
       {<html>
-         <head><link type="text/css" media="screen" rel="stylesheet" href="template.css" /></head>
+         <head><link type="text/css" media="screen" rel="stylesheet" href={TEMPLATE_CSS} /></head>
          <body><div class="cmt"><pre>{
            SyntaxHigh(originalData)
          }</pre></div></body>

@@ -19,7 +19,7 @@ sealed case class FileType private(name:String,extensions:String*){
 
 object FileType{
   val ResourceDir = "resource/"
-
+  private val instances = new mutable.HashSet[FileType]()
   //todo 単にMap保持すれば、valで保持して、名前つける必要なくね？
 
   val bison = FileType("bison","bison")
@@ -34,7 +34,7 @@ object FileType{
   val flex = FileType("flex","flex")
   val glsl = FileType("glsl","glsl")
   val haxe = FileType("haxe","haxe")
-//  val html = FileType("html","html","xhtml") //todo えんこーど
+//  val html = FileType("html","html","xhtml") //todo encode
   val java = FileType("java","java")
   val javascript = FileType("javascript","json")
   val javascript_dom = FileType("javascript_dom")
@@ -54,8 +54,7 @@ object FileType{
   val ruby = FileType("ruby","rb","erb")
 //  val scala = FileType("scala","scala","sbt")
   val scala = new FileType("scala","scala","sbt"){
-    val css = "template.css"
-    override lazy val jsFile = ByteFile(css,Source2html.fileToByteArray(ResourceDir+css))
+    override lazy val jsFile = ByteFile(TEMPLATE_CSS,Source2html.fileToByteArray(ResourceDir+TEMPLATE_CSS))
   }
 
   val sh = FileType("sh","sh")
@@ -65,10 +64,9 @@ object FileType{
   val sql = FileType("sql","sql")
   val tcl = FileType("tcl")
   val url = FileType("url")
-//  val xml = FileType("xml","xml") // todo えんこーどする
+//  val xml = FileType("xml","xml") // todo encode
   val xorg = FileType("xorg")
 
-  private lazy val instances = new mutable.HashSet[FileType]()
 
   lazy val allExtentions = name2FileType.keys.toSet
 

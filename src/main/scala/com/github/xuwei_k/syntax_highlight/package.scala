@@ -10,5 +10,7 @@ package object syntax_highlight{
     io.Source.fromBytes(data)(REPLACE).mkString
 
   implicit val FileTypeEqual = equalA[FileType]
+
+  val TEMPLATE_CSS = "template.css"
 }
 
