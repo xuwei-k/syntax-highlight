@@ -35,7 +35,7 @@ object FileType{
   val glsl = FileType("glsl","glsl")
   val haxe = FileType("haxe","haxe")
 //  val html = FileType("html","html","xhtml") //todo encode
-  val java = FileType("java","java")
+  val java = FileType("java","java","groovy","gradle")
   val javascript = FileType("javascript","json")
   val javascript_dom = FileType("javascript_dom")
   val latex = FileType("latex")
