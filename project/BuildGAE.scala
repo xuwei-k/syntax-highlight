@@ -13,7 +13,7 @@ object BuildGAE extends Build{
       Defaults.defaultSettings ++
       sbtappengine.Plugin.appengineSettings ++
       Seq(
-        scalaVersion := "2.9.1",
+        scalaVersion := "2.9.2",
         libraryDependencies ++= Seq(
            "org.eclipse.jetty" % "jetty-webapp" % "7.4.5.v20110725" % "container"
           ,"javax.servlet" % "servlet-api" % "2.5" % "provided"
@@ -21,10 +21,10 @@ object BuildGAE extends Build{
           ,"com.google.appengine" % "appengine-java-sdk" % gaeSDK
           ,"com.google.appengine" % "appengine-api-1.0-sdk" % gaeSDK
           ,"net.kindleit" % "gae-runtime" % gaeSDK
-          ,"org.scalatra" %% "scalatra" % "2.0.3"
-          ,"net.databinder" %% "pamflet-knockoff" % "0.3.2"
+          ,"org.scalatra" % "scalatra_2.9.1" % "2.0.4"
+          ,"net.databinder" % "pamflet-knockoff_2.9.1" % "0.4.0"
           ,"org.scalaz" %% "scalaz-core" % "6.0.4"
-          ,"com.github.jsuereth.scala-arm" %% "scala-arm" % "1.1"
+          ,"com.jsuereth" %% "scala-arm" % "1.2"
         )
         ,resolvers ++= Seq(
             "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"

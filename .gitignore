@@ -1,10 +1,7 @@
 /target
 /project/target
-/project/boot/
-/project/plugins/target
 /project/project/target
 *.swp
 *.class
 *.jar
-*.sh
 
