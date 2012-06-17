@@ -56,7 +56,7 @@ object MyMailService {
   /** 添付ファイル取得
    */
   private def getAttachments(part:Part):Attachment = {
-    var name = MimeUtility.decodeText(part.getFileName())
+    val name = MimeUtility.decodeText(part.getFileName())
     Attachment( name , part.getInputStream )
   }
 }

@@ -19,10 +19,15 @@ object ZipUtil {
       }.filterNot{
         _.isDirectory
       }.map{ e =>
-        var length = 0
-        while ({ length = zipIn.read(buf); length != -1 }) {
-          builder ++= (buf.take(length))
+        @annotation.tailrec
+        def read(){
+          val len = zipIn.read(buf)
+          if(len != -1){
+            builder ++= buf.take(len)
+            read()
+          }
         }
+        read()
         val file = new ByteFile(e.getName, builder.result)
         builder.clear()
         file

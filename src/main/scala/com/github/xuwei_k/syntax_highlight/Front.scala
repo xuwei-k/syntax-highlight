@@ -22,12 +22,18 @@ object Front{
     val stream = in.openStream
     val out = new ByteArrayOutputStream
     val fileName = in.getName
-
-    var len = 0
     val buf = new Array[Byte](1024 * 1024)
-    while ({ len = stream.read(buf, 0, buf.length); len } != -1) {
-      out.write(buf, 0, len)
+
+    @annotation.tailrec
+    def read(){
+      val len = stream.read(buf,0,buf.length)
+      if(len != -1){
+        out.write(buf, 0, len)
+        read()
+      }
     }
+    read()
+
     (fileName, new ByteArrayInputStream(out.toByteArray))
   }
 
