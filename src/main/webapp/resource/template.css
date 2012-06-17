@@ -106,7 +106,7 @@ a[href]:hover {
   font-size: 24pt;
   text-shadow: black 0px 2px 0px;
 /*  text-shadow: black 0px 0px 0px;*/
-text-decoration: none; 
+text-decoration: none;
 }
 
 #definition #owner {
@@ -162,7 +162,7 @@ text-decoration: none;
   padding-left: 15px;
   background: url("arrow-right.png") no-repeat 0 3px transparent;
 }
-  
+
 .toggleContainer.open .toggle {
   background: url("arrow-down.png") no-repeat 0 3px transparent;
 }
@@ -389,7 +389,7 @@ div.members > ol > li:last-child {
   background-color: #eee;
   margin: 5px 0;
   display: block;
-  font-family: monospace;
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
 }
 
 .cmt pre span.ano {
@@ -515,7 +515,7 @@ div.fullcommenttop .block {
   margin-bottom: 5px
 }
 
-div.fullcomment div.block ol li p, 
+div.fullcomment div.block ol li p,
 div.fullcomment div.block ol li {
   display:inline
 }
@@ -661,7 +661,7 @@ div.fullcomment dl.paramcmts > dd {
 
 #mbrsel > div > ol > li {
 /*  padding: 3px 10px;*/
-  line-height: 16pt; 
+  line-height: 16pt;
   display: inline-block;
   cursor: pointer;
 }
@@ -715,10 +715,10 @@ div.fullcomment dl.paramcmts > dd {
 #mbrsel .showall {
   color: #4C4C4C;
   line-height: 16px;
-  font-weight: bold;  
+  font-weight: bold;
 }
 
 #mbrsel .showall span {
   color: #4C4C4C;
-  font-weight: bold;  
+  font-weight: bold;
 }*/
