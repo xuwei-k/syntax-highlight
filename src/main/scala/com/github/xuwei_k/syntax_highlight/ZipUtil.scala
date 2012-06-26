@@ -8,14 +8,24 @@ import scala.collection.{ mutable => mu }
  */
 object ZipUtil {
 
+  // 大きいjarが含まれているとtimeoutで失敗するので、必要なさそうなファイルは省く
+  val defaultFilter = { e:ZipEntry =>
+     (! e.getName.endsWith("jar") ) && (e.getSize < 100000)
+  }
+
   /** zipのファイルを解凍して、それぞれをByteFileというentityにする
+   * @todo このfilterの条件を、URLのparameterで受け取れるようにする
+   * @todo filterしたファイル名一覧を書いたtextファイルを添付するなどして、
+   *       Download したユーザーがわかるようにする
    */
-  def extractFileList(in: InputStream): Seq[ByteFile] = {
+  def extractFileList(in: InputStream,filter: ZipEntry => Boolean = defaultFilter): Seq[ByteFile] = {
     resource.managed(new ZipInputStream(in)).acquireAndGet{ zipIn =>
       val buf = new Array[Byte](4096)
       val builder = new mu.ArrayBuilder.ofByte
       Iterator.continually(zipIn.getNextEntry).takeWhile{
         null ne
+      }.filter{
+        filter
       }.filterNot{
         _.isDirectory
       }.map{ e =>
