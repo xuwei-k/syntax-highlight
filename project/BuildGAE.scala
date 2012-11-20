@@ -15,15 +15,15 @@ object BuildGAE extends Build{
       Seq(
         scalaVersion := "2.9.2",
         libraryDependencies ++= Seq(
-           "org.eclipse.jetty" % "jetty-webapp" % "7.4.5.v20110725" % "container"
+           "org.eclipse.jetty" % "jetty-webapp" % "7.4.5.v20110725" % "container" // 7.4.5.v20110725 fail download :(
           ,"javax.servlet" % "servlet-api" % "2.5" % "provided"
           ,"commons-fileupload" % "commons-fileupload" % "1.2.2"
           ,"com.google.appengine" % "appengine-java-sdk" % gaeSDK
           ,"com.google.appengine" % "appengine-api-1.0-sdk" % gaeSDK
           ,"net.kindleit" % "gae-runtime" % gaeSDK
           ,"org.scalatra" % "scalatra_2.9.1" % "2.0.4"
-          ,"net.databinder" % "pamflet-knockoff_2.9.1" % "0.4.0"
-          ,"org.scalaz" %% "scalaz-core" % "6.0.4"
+          ,"net.databinder" % "pamflet-knockoff_2.9.1" % "0.4.1"
+          ,"org.scalaz" %% "scalaz-core" % "7.0.0-M4"
           ,"com.jsuereth" %% "scala-arm" % "1.2"
         )
         ,resolvers ++= Seq(

@@ -1,6 +1,6 @@
 package com.github.xuwei_k.syntax_highlight
 
-import scalaz._;import Scalaz._
+import scalaz._,Scalaz._
 import java.io._
 import scala.tools.nsc.doc.html.SyntaxHigh
 /**
@@ -35,7 +35,7 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
 
   /** 対応しているファイルの種類か? */
   lazy val isSupport: Boolean =
-    fileExtension.map{FileType.allExtentions.contains}.orZero
+    fileExtension.map{FileType.allExtentions.contains} | false
 
   /** syntax highlightに対応してなければNone */
   lazy val fileType: Option[FileType] =
@@ -48,7 +48,7 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
   lazy val parentDir: ZipUtil.Dir = name.reverse.dropWhile(_ /== '/').reverse
 
   lazy val isMarkdown: Boolean =
-    fileExtension.map{e => MDextensions.exists(e.equalsIgnoreCase)}.orZero
+    fileExtension.map{e => MDextensions.exists(e.equalsIgnoreCase)} | false
 
 }
 

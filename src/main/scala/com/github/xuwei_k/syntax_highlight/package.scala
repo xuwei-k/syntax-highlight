@@ -1,6 +1,6 @@
 package com.github.xuwei_k
 
-import scalaz._;import Scalaz._
+import scalaz._
 
 package object syntax_highlight{
 
@@ -9,7 +9,7 @@ package object syntax_highlight{
   def bytes2String(data:Array[Byte]):String =
     io.Source.fromBytes(data)(REPLACE).mkString
 
-  implicit val FileTypeEqual = equalA[FileType]
+  implicit val FileTypeEqual:Equal[FileType] = Equal.equalA
 
   val TEMPLATE_CSS = "template.css"
 }
