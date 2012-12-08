@@ -48,6 +48,7 @@ final class Front extends ScalatraFilter {
   }
 
   post("/source.zip") { //urlからフェッチする場合
+    catchErrorAndPrint{
     params.get("url") match {
       case Some(url) => {
         val con = FileService.getConnection(url)
@@ -69,6 +70,18 @@ final class Front extends ScalatraFilter {
       }
 
       case None => redirect("/index.html")
+    }
+    }
+  }
+
+  def catchErrorAndPrint[A](body: => A) = {
+    try{
+      body
+    }catch{
+      case e =>
+        e.printStackTrace
+        status(500)
+        e.getStackTrace.mkString(e.toString + "\n\n","\n","")
     }
   }
 
@@ -104,12 +117,14 @@ final class Front extends ScalatraFilter {
 
   // TODO use https://github.com/scalatra/scalatra/blob/2.0.3/fileupload/src/main/scala/org/scalatra/fileupload/FileUploadSupport.scala
   post("/file_upload") { //Userが自分のfileをuploadした場合
+    catchErrorAndPrint{
     for{
       (name,data) <- getUploadFiles.headOption//todo 複数ファイル対応
       if name.length > 0 //このチェックおかしい?
     }{
       val convertedData = Source2html.sourceFiles2html(data)
       transferData(name,convertedData)
+    }
     }
   }
 
