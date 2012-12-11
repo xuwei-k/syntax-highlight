@@ -24,7 +24,7 @@ object FileType{
 
   val bison = FileType("bison","bison")
   val c = FileType("c","c","m")//objective c ほすぃ・・・
-  val caml = FileType("caml","caml","ml","")
+  val caml = FileType("caml","caml","ml","fs")
   val changelog = FileType("changelog")
   val cpp = FileType("cpp","cpp","hpp","h","mm")
   val csharp = FileType("csharp","cs")
