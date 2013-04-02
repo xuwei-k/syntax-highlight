@@ -1,14 +1,16 @@
 <!-- ゲソ(`・ω・´)-->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>source code converter</title>
-    <link rel="shortcut icon" href="./favicon.ico" />
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>source code converter</title>
+  <link rel="shortcut icon" href="./favicon.ico" />
 
 <script language="javaScript">
-function file_upload()
-{
+var file_upload = function(){
   var form = document.file_up
   var mail = document.getElementById("mail").checked ? "mail=true" : ""
   var address = "mail_address=" + document.getElementById("mail_address").value
@@ -17,8 +19,10 @@ function file_upload()
   form.submit()
 }
 </script>
-  </head>
-  <body>
+</head>
+<body>
+<div class="container">
+  <div class="row">
     <h1>Source code converter</h1>
     <p>Source code files convert to syntax highlight html files</p>
     <dl>
@@ -40,34 +44,80 @@ function file_upload()
 
     <hr />
     <div style="font-size: x-large;">
-    <form method="post" action="/source.zip">
-      <p>please input URL</p>
-      <dl>
-        <dt>URL</dt><dd><input type="text" style="width:500px;height: 20px;" name="url"></input></dd>
-        <dt>send mail ?</dt><dd><input type="checkbox" name="mail" /></dd>
-        <dt>mail</dt><dd><input type="text" style="width:500px;height: 20px;" name="mail_address"></input></dd>
-        <dt>download ?</dt><dd><input type="checkbox" name="download" checked /></dd>
-      </dl>
-      <input type="submit"/>
+    <h3>please input URL</h3>
+    <form class="form-horizontal" method="post" action="/source.zip">
+      <div class="control-group">
+        <label class="control-label">URL</label>
+        <div class="controls">
+          <input type="text" class="input-xxlarge" name="url"></input>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="checkbox control-label">send mail ?</label>
+        <div class="controls">
+          <input type="checkbox" name="mail" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" >mail</label>
+        <div class="controls">
+          <input type="text" class="input-xxlarge" name="mail_address"></input>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="checkbox control-label">download ?</label>
+        <div class="controls">
+          <input type="checkbox" name="download" checked />
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input type="submit" class="btn btn-large btn-primary" />
+        </div>
+      </div>
     </form>
     <br />
     <hr />
-    <p>please choose zip file</p>
-    <form method="post" name="file_up" enctype="multipart/form-data">
-      <input type="file" name="upload_file" />
-      <dl>
-        <dt>send mail ?</dt><dd><input id="mail" type="checkbox" name="mail" /></dd>
-        <dt>mail</dt><dd><input type="text" style="width:500px;height: 20px;" id="mail_address"></input></dd>
-        <dt>download ?</dt><dd><input type="checkbox" id="download" /></dd>
-      </dl>
-      <input type="button" value="submit" onclick="file_upload()"/>
+
+    <h3>please choose zip file</h3>
+    <form class="form-horizontal" method="post" name="file_up" enctype="multipart/form-data">
+      <div class="control-group">
+        <div class="controls">
+          <input type="file" name="upload_file" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">send mail ?</label>
+        <div class="controls">
+          <input id="mail" type="checkbox" name="mail" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">mail</label>
+        <div class="controls">
+          <input type="text" style="width:500px;height: 20px;" id="mail_address"></input>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">download ?</label>
+        <div class="controls">
+          <input type="checkbox" id="download" />
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input type="button" class="btn btn-large btn-primary" value="submit" onclick="file_upload()"/>
+        </div>
+      </div>
     </form>
     </div>
     
     <p style="float:right">
       <a href="https://github.com/xuwei-k/syntax-highlight/" target="_blank">source code</a>
       <img src="http://code.google.com/appengine/images/appengine-silver-120x30.gif" alt="Powered by Google App Engine" />
-      Developing by <a href="http://twitter.com/#!/xuwei_k" target="_blank">xuwei_k</a>
+      Developing by <a href="http://twitter.com/xuwei_k" target="_blank">xuwei_k</a>
     </p>
-  </body>
+  </div>
+</div>
+</body>
 </html>

@@ -3,7 +3,7 @@ import Keys._
 
 object BuildGAE extends Build{
 
-  val gaeSDK = "1.7.4"
+  val gaeSDK = "1.7.5"
 
   lazy val root = Project("syntax-highlight", file("."),
     settings = {
@@ -20,7 +20,7 @@ object BuildGAE extends Build{
           ,"net.kindleit" % "gae-runtime" % gaeSDK
           ,"org.scalatra" % "scalatra_2.9.1" % "2.0.4"
           ,"net.databinder" % "pamflet-knockoff_2.9.1" % "0.4.1"
-          ,"org.scalaz" %% "scalaz-core" % "7.0.0-M7"
+          ,"org.scalaz" %% "scalaz-core" % "7.0.0-RC1"
           ,"com.jsuereth" %% "scala-arm" % "1.3"
         )
       )
