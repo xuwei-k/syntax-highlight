@@ -9,7 +9,7 @@ import scala.collection.{ mutable => mu }
 object ZipUtil {
 
   // 大きいjarが含まれているとtimeoutで失敗するので、必要なさそうなファイルは省く
-  val defaultFilter = { e:ZipEntry =>
+  val defaultFilter = { e: ZipEntry =>
      (! e.getName.endsWith("jar") ) && (e.getSize < 100000)
   }
 
@@ -18,7 +18,7 @@ object ZipUtil {
    * @todo filterしたファイル名一覧を書いたtextファイルを添付するなどして、
    *       Download したユーザーがわかるようにする
    */
-  def extractFileList(in: InputStream,filter: ZipEntry => Boolean = defaultFilter): Seq[ByteFile] = {
+  def extractFileList(in: InputStream, filter: ZipEntry => Boolean = defaultFilter): Seq[ByteFile] = {
     resource.managed(new ZipInputStream(in)).acquireAndGet{ zipIn =>
       val buf = new Array[Byte](4096)
       val builder = new mu.ArrayBuilder.ofByte
@@ -52,7 +52,7 @@ object ZipUtil {
    * @param zos Zipの出力のためのStream
    * @param files 圧縮するファイルの元データのファイル一覧
    */
-  def encode(zos: ZipOutputStream,files: Traversable[ByteFile]) {
+  def encode(zos: ZipOutputStream, files: Traversable[ByteFile]) {
     for {
       f <- files
     } {
@@ -63,6 +63,8 @@ object ZipUtil {
     zos.close
   }
 
+  def multiMap[A, B]() = new mu.HashMap[A, mu.Set[B]] with mu.MultiMap[A, B]
+
   /** syntax highlight用のjsのfileを加えるのに必要な情報を取得
    * fileの一覧から
    * Map(ディレクトリ -> そこに存在するFileTypeのSet)
@@ -70,8 +72,7 @@ object ZipUtil {
    */
   def getFileMap(files: Traversable[ByteFile]): mu.HashMap[Dir, mu.Set[FileType]] = {
 
-    //なんでMultiMap作るだけなのに、こんなに長いの？
-    val map = new mu.HashMap[Dir, mu.Set[FileType]] with mu.MultiMap[Dir, FileType]
+    val map = multiMap[Dir, FileType]()
     for {
       f <- files
       if f.isSupport

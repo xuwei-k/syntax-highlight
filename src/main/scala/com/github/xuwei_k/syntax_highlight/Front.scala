@@ -12,13 +12,13 @@ import com.google.appengine.api.mail.{ MailService }
 object Front{
   type InputFile = (String,InputStream) //todo classにする？
 
-  implicit def toScalaIterator[A](ite:{def next():A;def hasNext():Boolean}) =
+  implicit def toScalaIterator[A](ite:{def next(): A; def hasNext(): Boolean}) =
     new Iterator[A]{
       override def next = ite.next
       override def hasNext = ite.hasNext
     }
 
-  def getUploadFile(in:FileItemStream):InputFile = {
+  def getUploadFile(in: FileItemStream): InputFile = {
     val stream = in.openStream
     val out = new ByteArrayOutputStream
     val fileName = in.getName
@@ -88,7 +88,7 @@ final class Front extends ScalatraFilter {
   /**
    * requestから、uploadされたfileとパラメータを抽出
    */
-  def getUploadFiles():List[InputFile] = {
+  def getUploadFiles(): List[InputFile] = {
 
     val list = new ServletFileUpload().getItemIterator(request)
 

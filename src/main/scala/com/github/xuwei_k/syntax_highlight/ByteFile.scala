@@ -3,6 +3,7 @@ package com.github.xuwei_k.syntax_highlight
 import scalaz._,Scalaz._
 import java.io._
 import scala.tools.nsc.doc.html.SyntaxHigh
+
 /**
  * @param name fileの名前
  * @param data fileの中身
@@ -13,7 +14,7 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
   lazy val convertedName = if(isSupport || isMarkdown) name + ".html" else name
 
   /** (変換できるならば)変換後のbinaryのデータ */
-  lazy val data:Array[Byte] =
+  lazy val data: Array[Byte] =
     if(fileType === Some(FileType.scala)){
       {<html>
          <head><link type="text/css" media="screen" rel="stylesheet" href={TEMPLATE_CSS} /></head>

@@ -4,7 +4,7 @@ import javax.servlet.http.{ HttpServletResponse => Response }
 
 object DownloadService {
 
-  def download(response: Response, fileName:String , data: Array[Byte]) {
+  def download(response: Response, fileName: String , data: Array[Byte]) {
     response.setContentType("application/zip")
     response.setHeader("Content-Disposition", "attachment; filename=" + fileName )
     resource.managed(response.getOutputStream).foreach{ _.write(data) }

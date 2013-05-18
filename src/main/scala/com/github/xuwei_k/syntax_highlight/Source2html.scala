@@ -13,12 +13,12 @@ object Source2html {
     }
 
   /** jsとかcss */
-  private def addFiles(fType:FileType*):Seq[ByteFile] =
+  private def addFiles(fType: FileType*): Seq[ByteFile] =
     fType.map{_.jsFile} ++ commonJS
 
   /** ファイルをbyte配列にして返す
    */
-  def fileToByteArray(fileName:String):Array[Byte] = {
+  def fileToByteArray(fileName: String): Array[Byte] = {
     val file = new File(fileName)
     val buf = new Array[Byte](file.length toInt)
     resource.managed(new FileInputStream(file)).foreach{
@@ -31,7 +31,7 @@ object Source2html {
    * @param in zipになってるsource file
    * @param out 作成したzipの出力先
    */
-  private def sourceFiles2html(in:InputStream,out:OutputStream){
+  private def sourceFiles2html(in: InputStream, out: OutputStream){
     val files = ZipUtil.extractFileList( in )
 
     val newFiles = for{
@@ -42,7 +42,7 @@ object Source2html {
     ZipUtil.encode(new ZipOutputStream( out ), files ++ newFiles )
   }
 
-  def sourceFiles2html(in:InputStream):Array[Byte] = {
+  def sourceFiles2html(in: InputStream): Array[Byte] = {
     val out = new java.io.ByteArrayOutputStream
     Source2html.sourceFiles2html( in ,out)
     out.toByteArray

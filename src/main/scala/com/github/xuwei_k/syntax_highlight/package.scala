@@ -9,7 +9,7 @@ package object syntax_highlight{
   def bytes2String(data:Array[Byte]):String =
     io.Source.fromBytes(data)(REPLACE).mkString
 
-  implicit val FileTypeEqual:Equal[FileType] = Equal.equalA
+  implicit val FileTypeEqual: Equal[FileType] = Equal.equalA
 
   val TEMPLATE_CSS = "template.css"
 }

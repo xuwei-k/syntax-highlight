@@ -2,7 +2,7 @@ package com.github.xuwei_k.syntax_highlight
 
 object HtmlData {
 
-  private[this] def header(t:FileType):Array[Byte] = {
+  private[this] def header(t: FileType): Array[Byte] = {
    val n = t.name
 
    {"""<html>
@@ -25,12 +25,12 @@ object HtmlData {
 
   /**
    */
-  def convertHtml(data:Array[Byte],t:FileType):Array[Byte] = {
+  def convertHtml(data: Array[Byte], t: FileType): Array[Byte] = {
     header(t) ++ escapeHtml(data) ++ footer
   }
 
   // TODO side effect だらけで汚いｪ・・・(´・ω・｀)
-  def escapeHtml(data:Array[Byte]):Array[Byte] = {
+  def escapeHtml(data: Array[Byte]): Array[Byte] = {
     import scala.xml.Utility.escape
 
     val buf = escape(bytes2String(data),new StringBuilder )
