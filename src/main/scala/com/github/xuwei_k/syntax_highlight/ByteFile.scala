@@ -1,6 +1,8 @@
 package com.github.xuwei_k.syntax_highlight
 
-import scalaz._,Scalaz._
+import scalaz.std.AllInstances._
+import scalaz.syntax.std.option._
+import scalaz.syntax.equal._
 import java.io._
 import scala.tools.nsc.doc.html.SyntaxHigh
 
@@ -32,7 +34,7 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
     }
 
   /** 拡張子 */
-  private lazy val fileExtension: Option[String] = name.split('.').lastOption
+  private[this] lazy val fileExtension: Option[String] = name.split('.').lastOption
 
   /** 対応しているファイルの種類か? */
   lazy val isSupport: Boolean =
@@ -54,5 +56,5 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
 }
 
 object ByteFile{
-  private val MDextensions = Set("md","markdown")
+  private val MDextensions = Set("md", "markdown")
 }

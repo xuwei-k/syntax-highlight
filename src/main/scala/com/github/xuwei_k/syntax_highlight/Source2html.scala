@@ -32,19 +32,19 @@ object Source2html {
    * @param out 作成したzipの出力先
    */
   private def sourceFiles2html(in: InputStream, out: OutputStream){
-    val files = ZipUtil.extractFileList( in )
+    val files = ZipUtil.extractFileList(in)
 
     val newFiles = for{
-      (dir,fileTypes) <- ZipUtil.getFileMap( files )
+      (dir, fileTypes) <- ZipUtil.getFileMap(files)
       f <- addFiles(fileTypes.toSeq:_*)
     } yield f.copy(name = {dir + f.name})
 
-    ZipUtil.encode(new ZipOutputStream( out ), files ++ newFiles )
+    ZipUtil.encode(new ZipOutputStream(out), files ++ newFiles)
   }
 
   def sourceFiles2html(in: InputStream): Array[Byte] = {
     val out = new java.io.ByteArrayOutputStream
-    Source2html.sourceFiles2html( in ,out)
+    Source2html.sourceFiles2html(in, out)
     out.toByteArray
   }
 }

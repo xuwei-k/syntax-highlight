@@ -10,7 +10,7 @@ import java.io.{ ByteArrayOutputStream, ByteArrayInputStream, File, InputStream 
 import com.google.appengine.api.mail.{ MailService }
 
 object Front{
-  type InputFile = (String,InputStream) //todo classにする？
+  type InputFile = (String, InputStream) //todo classにする？
 
   implicit def toScalaIterator[A](ite:{def next(): A; def hasNext(): Boolean}) =
     new Iterator[A]{
@@ -25,8 +25,8 @@ object Front{
     val buf = new Array[Byte](1024 * 1024)
 
     @annotation.tailrec
-    def read(){
-      val len = stream.read(buf,0,buf.length)
+    def read(): Unit = {
+      val len = stream.read(buf, 0, buf.length)
       if(len != -1){
         out.write(buf, 0, len)
         read()

@@ -1,6 +1,7 @@
 package com.github.xuwei_k.syntax_highlight
 
 import scala.collection.mutable
+import scalaz.Equal
 
 /** fileの種類表す
  * @param name
@@ -14,7 +15,7 @@ sealed case class FileType private(name: String, extensions: String*){
   private[this] lazy val jsFileName = "sh_%s.js" format name
 
   lazy val jsFile: ByteFile =
-    ByteFile(jsFileName,Source2html.fileToByteArray(ResourceDir + jsFileName))
+    ByteFile(jsFileName, Source2html.fileToByteArray(ResourceDir + jsFileName))
 }
 
 object FileType{
@@ -55,7 +56,7 @@ object FileType{
   val ruby = FileType("ruby", "rb", "erb")
 //  val scala = FileType("scala", "scala", "sbt")
   val scala = new FileType("scala", "scala", "sbt"){
-    override lazy val jsFile = ByteFile(TEMPLATE_CSS,Source2html.fileToByteArray(ResourceDir+TEMPLATE_CSS))
+    override lazy val jsFile = ByteFile(TEMPLATE_CSS, Source2html.fileToByteArray(ResourceDir+TEMPLATE_CSS))
   }
 
   val sh = FileType("sh", "sh")
@@ -71,12 +72,14 @@ object FileType{
 
   lazy val allExtentions = name2FileType.keys.toSet
 
-  private lazy val name2FileType: Map[String,FileType] =
+  private[this] lazy val name2FileType: Map[String,FileType] =
     instances.flatMap{ f =>
       f.extensions.map{
         _ -> f
       }
     }.toMap
 
-  def getFileType(extensiton:String): FileType = name2FileType(extensiton)
+  def getFileType(extensiton: String): FileType = name2FileType(extensiton)
+
+  implicit val FileTypeEqual: Equal[FileType] = Equal.equalA
 }

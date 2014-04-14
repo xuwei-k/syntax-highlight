@@ -12,14 +12,14 @@ import com.google.appengine.api.mail.{MailService,MailServiceFactory}
 
 object MyMailService {
   //添付ファイル
-  case class Attachment(name: String, data: InputStream)
+  final case class Attachment(name: String, data: InputStream)
 
   /** メール送信
    */
   def send(sendAddress: String, attachments: MailService.Attachment *){
 
     //なにかしら、本文に文字を入れないと、送信できないらしい!!!
-    val message = new MailService.Message( "test1@syntax-highlight.appspotmail.com" , sendAddress ,"test" , "body" )
+    val message = new MailService.Message("test1@syntax-highlight.appspotmail.com", sendAddress, "test", "body")
     message.setAttachments(attachments:_*)
     MailServiceFactory.getMailService.send(message)
   }
@@ -57,6 +57,6 @@ object MyMailService {
    */
   private def getAttachments(part: Part): Attachment = {
     val name = MimeUtility.decodeText(part.getFileName())
-    Attachment( name , part.getInputStream )
+    Attachment(name, part.getInputStream)
   }
 }

@@ -1,15 +1,11 @@
 package com.github.xuwei_k
 
-import scalaz._
-
 package object syntax_highlight{
 
   private[this] val REPLACE = io.Codec("UTF-8").onMalformedInput(java.nio.charset.CodingErrorAction.REPLACE)
 
-  def bytes2String(data:Array[Byte]):String =
+  def bytes2String(data: Array[Byte]):String =
     io.Source.fromBytes(data)(REPLACE).mkString
-
-  implicit val FileTypeEqual: Equal[FileType] = Equal.equalA
 
   val TEMPLATE_CSS = "template.css"
 }
