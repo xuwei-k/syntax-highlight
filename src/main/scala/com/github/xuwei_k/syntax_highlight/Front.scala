@@ -78,7 +78,7 @@ final class Front extends ScalatraFilter {
     try{
       body
     }catch{
-      case e =>
+      case e: Throwable =>
         e.printStackTrace
         status(500)
         e.getStackTrace.mkString(e.toString + "\n\n","\n","")
