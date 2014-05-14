@@ -3,7 +3,7 @@ import Keys._
 
 object BuildGAE extends Build{
 
-  val gaeSDK = "1.9.2"
+  val gaeSDK = "1.9.4"
 
   lazy val root = Project("syntax-highlight", file("."),
     settings = {
