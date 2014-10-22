@@ -44,7 +44,7 @@ final class Front extends ScalatraFilter {
   import Front._
 
   get("/*") {
-    "hello"
+    redirect("/")
   }
 
   post("/source.zip") { //urlからフェッチする場合
