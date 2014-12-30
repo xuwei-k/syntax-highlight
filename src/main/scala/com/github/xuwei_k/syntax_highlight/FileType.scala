@@ -34,7 +34,7 @@ object FileType{
   val diff = FileType("diff", "diff")
   val flex = FileType("flex", "flex")
   val glsl = FileType("glsl", "glsl")
-  val haskell = FileType("haskell", "hs", "lhs", "hsc", "hs-boot", "lhs-boot", "purs")
+  val haskell = FileType("haskell", "hs", "lhs", "hsc", "hs-boot", "lhs-boot", "purs", "e")
   val haxe = FileType("haxe", "haxe")
 //  val html = FileType("html", "html", "xhtml") //todo encode
   val java = FileType("java", "java", "groovy", "gradle")
