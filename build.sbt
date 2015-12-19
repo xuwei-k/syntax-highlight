@@ -1,5 +1,7 @@
 name := "syntax-highlight"
 
+fullResolvers ~= {_.filterNot(_.name == "jcenter")}
+
 sbtappengine.Plugin.appengineSettings
 
 scalaVersion := "2.10.4"
