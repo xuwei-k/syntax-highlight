@@ -20,7 +20,7 @@ object Source2html {
    */
   def fileToByteArray(fileName: String): Array[Byte] = {
     val file = new File(fileName)
-    val buf = new Array[Byte](file.length toInt)
+    val buf = new Array[Byte](file.length.toInt)
     resource.managed(new FileInputStream(file)).foreach{
       _.read(buf)
     }

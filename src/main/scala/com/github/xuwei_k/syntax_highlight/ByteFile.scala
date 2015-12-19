@@ -3,13 +3,8 @@ package com.github.xuwei_k.syntax_highlight
 import scalaz.std.AllInstances._
 import scalaz.syntax.std.option._
 import scalaz.syntax.equal._
-import java.io._
 import scala.tools.nsc.doc.html.SyntaxHigh
 
-/**
- * @param name fileの名前
- * @param data fileの中身
- */
 case class ByteFile(name: String, originalData: Array[Byte]) {
   import ByteFile._
 
@@ -38,7 +33,7 @@ case class ByteFile(name: String, originalData: Array[Byte]) {
 
   /** 対応しているファイルの種類か? */
   lazy val isSupport: Boolean =
-    fileExtension.map{FileType.allExtentions.contains} | false
+    fileExtension.map(FileType.allExtensions) | false
 
   /** syntax highlightに対応してなければNone */
   lazy val fileType: Option[FileType] =

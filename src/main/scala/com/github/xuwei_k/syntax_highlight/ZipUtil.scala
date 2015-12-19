@@ -23,7 +23,7 @@ object ZipUtil {
       val buf = new Array[Byte](4096)
       val builder = new mu.ArrayBuilder.ofByte
       Iterator.continually(zipIn.getNextEntry).takeWhile{
-        null ne
+        null ne _
       }.filter{
         filter
       }.filterNot{

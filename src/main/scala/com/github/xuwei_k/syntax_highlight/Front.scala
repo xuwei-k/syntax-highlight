@@ -1,18 +1,18 @@
 package com.github.xuwei_k.syntax_highlight
 
-import scala.collection.JavaConversions._
-import javax.servlet.http._
-import org.scalatra.{ ScalatraFilter }
-import org.apache.commons.fileupload.{FileItemStream,FileItemIterator}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
+
+import com.google.appengine.api.mail.MailService
+import org.apache.commons.fileupload.FileItemStream
 import org.apache.commons.fileupload.servlet.ServletFileUpload
+import org.scalatra.ScalatraFilter
+
 import scala.collection.JavaConversions._
-import java.io.{ ByteArrayOutputStream, ByteArrayInputStream, File, InputStream }
-import com.google.appengine.api.mail.{ MailService }
 
 object Front{
   type InputFile = (String, InputStream) //todo classにする？
 
-  implicit def toScalaIterator[A](ite:{def next(): A; def hasNext(): Boolean}) =
+  private implicit def toScalaIterator[A](ite:{def next(): A; def hasNext(): Boolean}) =
     new Iterator[A]{
       override def next = ite.next
       override def hasNext = ite.hasNext
@@ -50,7 +50,7 @@ final class Front extends ScalatraFilter {
   post("/source.zip") { //urlからフェッチする場合
     catchErrorAndPrint{
     params.get("url") match {
-      case Some(url) => {
+      case Some(url) =>
         val con = FileService.getConnection(url)
         System.err.println(con.getHeaderFields)
         val fileName = {for{
@@ -67,7 +67,6 @@ final class Front extends ScalatraFilter {
         if (params.get("download").isDefined) {
           DownloadService.download(response, fileName, convertedData)
         }
-      }
 
       case None => redirect("/index.html")
     }
@@ -129,9 +128,10 @@ final class Front extends ScalatraFilter {
   }
 
   post("/_ah/mail/*") { //mailを受信して、メールで返信
-    import javax.mail.{ Session }
+    import javax.mail.Session
     import javax.mail.internet.MimeMessage
-    import com.google.appengine.api.mail.{ MailService }
+
+    import com.google.appengine.api.mail.MailService
 
     val s = Session.getInstance(System.getProperties)
     val msg = new MimeMessage(s, request.getInputStream)

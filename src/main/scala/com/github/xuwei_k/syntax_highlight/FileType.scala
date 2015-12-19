@@ -70,7 +70,7 @@ object FileType{
   val xorg = FileType("xorg")
 
 
-  lazy val allExtentions = name2FileType.keys.toSet
+  lazy val allExtensions = name2FileType.keys.toSet
 
   private[this] lazy val name2FileType: Map[String,FileType] =
     instances.flatMap{ f =>
@@ -79,7 +79,7 @@ object FileType{
       }
     }.toMap
 
-  def getFileType(extensiton: String): FileType = name2FileType(extensiton)
+  def getFileType(extension: String): FileType = name2FileType(extension)
 
   implicit val FileTypeEqual: Equal[FileType] = Equal.equalA
 }
