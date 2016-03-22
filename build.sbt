@@ -23,7 +23,7 @@ libraryDependencies ++= (
   ("commons-fileupload" % "commons-fileupload" % "1.2.2") ::
   ("org.scalatra" %% "scalatra" % "2.0.5") :: // https://code.google.com/p/googleappengine/issues/detail?id=3091
   ("org.pegdown" % "pegdown" % "1.4.1") ::
-  ("org.scalaz" %% "scalaz-core" % "7.1.6") ::
+  ("org.scalaz" %% "scalaz-core" % "7.2.1") ::
   ("com.jsuereth" %% "scala-arm" % "1.4") ::
   Nil
 )
