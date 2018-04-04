@@ -11,7 +11,7 @@ object MyMailService {
 
   /** メール送信
    */
-  def send(sendAddress: String, attachments: MailService.Attachment *){
+  def send(sendAddress: String, attachments: MailService.Attachment *): Unit ={
 
     //なにかしら、本文に文字を入れないと、送信できないらしい!!!
     val message = new MailService.Message("test1@syntax-highlight.appspotmail.com", sendAddress, "test", "body")
